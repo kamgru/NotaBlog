@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Core", "NotaBlog.Core\NotaBlog.Core.csproj", "{0164BD34-0A3A-4683-BEEF-FD3734795DE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Core.Tests", "NotaBlog.Core.Tests\NotaBlog.Core.Tests.csproj", "{A0D3F95E-638F-4ED6-86EC-E8FCE1FCBF11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0164BD34-0A3A-4683-BEEF-FD3734795DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0164BD34-0A3A-4683-BEEF-FD3734795DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0164BD34-0A3A-4683-BEEF-FD3734795DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D3F95E-638F-4ED6-86EC-E8FCE1FCBF11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D3F95E-638F-4ED6-86EC-E8FCE1FCBF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D3F95E-638F-4ED6-86EC-E8FCE1FCBF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D3F95E-638F-4ED6-86EC-E8FCE1FCBF11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
