@@ -14,7 +14,7 @@ namespace NotaBlog.Core.Tests
         private readonly DateTimeProvider _dateTimeProvider = new DateTimeProvider { DateTimeNow = DateTime.Now };
 
         [Fact]
-        public void GivenValidCommand_WhenStoryCreated_ItShouldSetGuid()
+        public void GivenValidCommand_WhenCreatingStory_ItShouldSetGuid()
         {
             var repository = new InMemoryStoryRepository();
             var commandHandler = new CommandHandler(repository, _dateTimeProvider);
@@ -26,6 +26,39 @@ namespace NotaBlog.Core.Tests
             });
 
             repository.Stories.First().Id.ShouldBeEquivalentTo(expectedId);
+        }
+
+        [Fact]
+        public void GivenValidCommand_WhenCreatingStory_ItShouldSetTitle()
+        {
+            var repository = new InMemoryStoryRepository();
+            var commandHandler = new CommandHandler(repository, _dateTimeProvider);
+            var expectedTitle = "my test title";
+
+            commandHandler.Handle(new CreateStory
+            {
+                StoryId = Guid.NewGuid(),
+                Title = expectedTitle
+            });
+
+            repository.Stories.First().Title.ShouldBeEquivalentTo(expectedTitle);
+        }
+
+        [Fact]
+        public void GivenValidCommand_WhenCreatingStory_ItShouldSetContent()
+        {
+            var repository = new InMemoryStoryRepository();
+            var commandHandler = new CommandHandler(repository, _dateTimeProvider);
+            var expectedContent = "my test content";
+
+            commandHandler.Handle(new CreateStory
+            {
+                StoryId = Guid.NewGuid(),
+                Title = "title",
+                Content = expectedContent
+            });
+
+            repository.Stories.First().Content.ShouldBeEquivalentTo(expectedContent);
         }
 
         [Fact]

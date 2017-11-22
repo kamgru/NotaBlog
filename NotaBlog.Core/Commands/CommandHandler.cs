@@ -23,6 +23,9 @@ namespace NotaBlog.Core.Commands
         public void Handle(CreateStory command)
         {
             var story = new StoryFactory(_dateTimeProvider).CreateNew(command.StoryId);
+            story.Title = command.Title;
+            story.Content = command.Content;
+
             _storyRepository.Add(story);
             _storyRepository.Save();
         }
