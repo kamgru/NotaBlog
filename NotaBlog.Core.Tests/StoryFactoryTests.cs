@@ -7,7 +7,7 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class CreateStoryTests
+    public class StoryFactoryTests
     {
         private readonly DateTimeProvider _timeProvider = new DateTimeProvider();
 

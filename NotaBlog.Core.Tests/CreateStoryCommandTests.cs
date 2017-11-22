@@ -9,12 +9,12 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class CommandHandlerTests
+    public class CreateStoryCommandTests
     {
         private readonly DateTimeProvider _dateTimeProvider = new DateTimeProvider { DateTimeNow = DateTime.Now };
 
         [Fact]
-        public void WhenStoryCreated_ItShouldSetGuid()
+        public void GivenValidCommand_WhenStoryCreated_ItShouldSetGuid()
         {
             var repository = new InMemoryStoryRepository();
             var commandHandler = new CommandHandler(repository, _dateTimeProvider);
