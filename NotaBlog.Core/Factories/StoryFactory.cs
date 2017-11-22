@@ -15,11 +15,11 @@ namespace NotaBlog.Core.Factories
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public Story CreateNew()
+        public Story CreateNew(Guid guid)
         {
             return new Story
             {
-                Guid = Guid.NewGuid(),
+                Id = guid,
                 Created = _dateTimeProvider.Now()
             };
         }

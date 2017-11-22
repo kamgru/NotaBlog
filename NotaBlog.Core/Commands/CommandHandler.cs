@@ -22,7 +22,7 @@ namespace NotaBlog.Core.Commands
 
         public void Handle(CreateStory command)
         {
-            var story = new StoryFactory(_dateTimeProvider).CreateNew();
+            var story = new StoryFactory(_dateTimeProvider).CreateNew(command.StoryId);
             _storyRepository.Add(story);
             _storyRepository.Save();
         }

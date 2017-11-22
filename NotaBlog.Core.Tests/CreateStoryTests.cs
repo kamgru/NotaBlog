@@ -14,7 +14,7 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenCreatingStory_ItShouldHaveStatusSetToDraft()
         {
-            var story = StoryFactory().CreateNew();
+            var story = StoryFactory().CreateNew(Guid.NewGuid());
             story.PublicationStatus.ShouldBeEquivalentTo(PublicationStatus.Draft);
         }
 
@@ -23,15 +23,15 @@ namespace NotaBlog.Core.Tests
         {
             _timeProvider.DateTimeNow = DateTime.Now;
 
-            var story = StoryFactory().CreateNew();
+            var story = StoryFactory().CreateNew(Guid.NewGuid());
             story.Created.ShouldBeEquivalentTo(_timeProvider.Now());
         }
 
         [Fact]
         public void WhenCreatingStory_ItShouldHaveNewGuid()
         {
-            var story = StoryFactory().CreateNew();
-            story.Guid.Should().NotBe(Guid.Empty);
+            var story = StoryFactory().CreateNew(Guid.NewGuid());
+            story.Id.Should().NotBe(Guid.Empty);
         }
 
         private StoryFactory StoryFactory()
