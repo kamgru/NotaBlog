@@ -29,5 +29,10 @@ namespace NotaBlog.Core.Commands
             _storyRepository.Add(story);
             _storyRepository.Save();
         }
+
+        public CommandValidationResult Handle(PublishStory command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

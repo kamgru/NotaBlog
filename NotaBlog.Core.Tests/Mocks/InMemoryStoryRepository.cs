@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NotaBlog.Core.Entities;
+using System.Linq;
 
 namespace NotaBlog.Core.Tests.Mocks
 {
@@ -14,6 +15,11 @@ namespace NotaBlog.Core.Tests.Mocks
         public void Add(Story story)
         {
             Stories.Add(story);
+        }
+
+        public Story Get(Guid id)
+        {
+            return Stories.FirstOrDefault(item => item.Id == id);
         }
 
         public void Save()

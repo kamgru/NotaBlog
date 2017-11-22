@@ -8,6 +8,7 @@ namespace NotaBlog.Core.Repositories
     public interface IStoryRepository
     {
         void Add(Story story);
+        Story Get(Guid id);
         void Save();
     }
 }
