@@ -9,5 +9,12 @@ namespace NotaBlog.Core.Commands
     {
         public IReadOnlyCollection<string> Errors { get; set; }
         public bool Success => (Errors == null || Errors.Count == 0);
+
+        public CommandValidationResult() { }
+
+        public CommandValidationResult(params string[] errors)
+        {
+            Errors = errors;
+        }
     }
 }

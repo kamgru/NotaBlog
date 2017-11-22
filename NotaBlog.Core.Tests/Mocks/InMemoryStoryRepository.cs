@@ -11,6 +11,7 @@ namespace NotaBlog.Core.Tests.Mocks
     {
         public List<Story> Stories { get; set; } = new List<Story>();
         public bool SaveWasCalled { get; set; }
+        public bool UpdateWasCalled { get; private set; }
 
         public void Add(Story story)
         {
@@ -25,6 +26,14 @@ namespace NotaBlog.Core.Tests.Mocks
         public void Save()
         {
             SaveWasCalled = true;
+        }
+
+        public void Update(Story story)
+        {
+            var oldStory = Stories.FirstOrDefault(item => item.Id == story.Id);
+            Stories.Remove(oldStory);
+            Stories.Add(story);
+            UpdateWasCalled = true;
         }
     }
 }
