@@ -23,6 +23,7 @@ namespace NotaBlog.Core.Commands
         {
             var story = new Story(_dateTimeProvider);
             _storyRepository.Add(story);
+            _storyRepository.Save();
         }
     }
 }

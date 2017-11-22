@@ -13,7 +13,7 @@ namespace NotaBlog.Core.Tests
         private readonly DateTimeProvider _dateTimeProvider = new DateTimeProvider { DateTimeNow = DateTime.Now };
 
         [Fact]
-        public void GivenValidCommand_WhenArticleCreated_ItShouldBeAddedToRepository()
+        public void GivenValidCommand_WhenStoryCreated_ItShouldBeAddedToRepository()
         {
             var repository = new InMemoryStoryRepository();
             var commandHandler = new CommandHandler(repository, _dateTimeProvider);
@@ -21,6 +21,17 @@ namespace NotaBlog.Core.Tests
             commandHandler.Handle(new CreateStory());
 
             repository.Stories.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void GivenValidCommand_WhenStoryAddedToRepository_ItShouldSave()
+        {
+            var repository = new InMemoryStoryRepository();
+            var commandHandler = new CommandHandler(repository, _dateTimeProvider);
+
+            commandHandler.Handle(new CreateStory());
+
+            repository.SaveWasCalled.Should().BeTrue();
         }
     }
 }
