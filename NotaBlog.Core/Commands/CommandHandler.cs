@@ -1,4 +1,5 @@
 ﻿using NotaBlog.Core.Entities;
+using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
 using NotaBlog.Core.Services;
 using System;
@@ -21,7 +22,7 @@ namespace NotaBlog.Core.Commands
 
         public void Handle(CreateStory command)
         {
-            var story = new Story(_dateTimeProvider);
+            var story = new StoryFactory(_dateTimeProvider).CreateNew();
             _storyRepository.Add(story);
             _storyRepository.Save();
         }
