@@ -10,6 +10,5 @@ namespace NotaBlog.Core.Repositories
         void Add(Story story);
         Story Get(Guid id);
         void Update(Story story);
-        void Save();
     }
 }

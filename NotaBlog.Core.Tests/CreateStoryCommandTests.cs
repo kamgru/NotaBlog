@@ -71,16 +71,5 @@ namespace NotaBlog.Core.Tests
 
             repository.Stories.Should().HaveCount(1);
         }
-
-        [Fact]
-        public void GivenValidCommand_WhenStoryAddedToRepository_ItShouldSave()
-        {
-            var repository = new InMemoryStoryRepository();
-            var commandHandler = new CreateStoryHandler(repository, _dateTimeProvider);
-
-            commandHandler.Handle(new CreateStory());
-
-            repository.SaveWasCalled.Should().BeTrue();
-        }
     }
 }

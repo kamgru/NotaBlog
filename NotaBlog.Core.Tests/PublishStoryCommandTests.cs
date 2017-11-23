@@ -33,7 +33,7 @@ namespace NotaBlog.Core.Tests
         }
 
         [Fact]
-        public void GivenValidCommand_WhenStoryPublished_ItShouldBeSavedInRepository()
+        public void GivenValidCommand_WhenStoryPublished_ItShouldBeUpdatedInRepository()
         {
             var story = new Story
             {
@@ -51,7 +51,6 @@ namespace NotaBlog.Core.Tests
                 });
 
             repository.UpdateWasCalled.Should().BeTrue();
-            repository.SaveWasCalled.Should().BeTrue();
         }
     }
 }

@@ -27,7 +27,6 @@ namespace NotaBlog.Core.Commands
             story.PublicationStatus = PublicationStatus.Published;
 
             _storyRepository.Update(story);
-            _storyRepository.Save();
 
             return new CommandValidationResult();
         }

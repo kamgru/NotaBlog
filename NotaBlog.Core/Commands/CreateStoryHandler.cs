@@ -26,7 +26,6 @@ namespace NotaBlog.Core.Commands
             story.Content = command.Content;
 
             _storyRepository.Add(story);
-            _storyRepository.Save();
 
             return new CommandValidationResult();
         }
