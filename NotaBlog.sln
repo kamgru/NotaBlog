@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Core.Tests", "Nota
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Persistence", "NotaBlog.Persistence\NotaBlog.Persistence.csproj", "{4D6491C3-6F63-41CB-A1B3-9BFB25B00DD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Persistence.Tests", "NotaBlog.Persistence.Tests\NotaBlog.Persistence.Tests.csproj", "{242114FE-1015-42C4-AB25-D0582211A036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4D6491C3-6F63-41CB-A1B3-9BFB25B00DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D6491C3-6F63-41CB-A1B3-9BFB25B00DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D6491C3-6F63-41CB-A1B3-9BFB25B00DD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{242114FE-1015-42C4-AB25-D0582211A036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{242114FE-1015-42C4-AB25-D0582211A036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{242114FE-1015-42C4-AB25-D0582211A036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{242114FE-1015-42C4-AB25-D0582211A036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

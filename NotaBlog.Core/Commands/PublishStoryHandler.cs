@@ -17,7 +17,7 @@ namespace NotaBlog.Core.Commands
 
         public CommandValidationResult Handle(PublishStory command)
         {
-            var story = _storyRepository.Get(command.EntityId);
+            var story = _storyRepository.Get(command.EntityId).Result;
 
             if (!IsValid(command, story, out IEnumerable<string> errors))
             {

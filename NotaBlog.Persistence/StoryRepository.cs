@@ -1,22 +1,33 @@
 ﻿using NotaBlog.Core.Repositories;
 using System;
 using NotaBlog.Core.Entities;
+using MongoDB.Driver;
+using System.Threading.Tasks;
 
 namespace NotaBlog.Persistence
 {
     public class StoryRepository : IStoryRepository
     {
-        public void Add(Story story)
+        private readonly IMongoDatabase _database;
+
+        public StoryRepository(IMongoDatabase mongoDatabase)
         {
-            throw new NotImplementedException();
+            _database = mongoDatabase;
         }
 
-        public Story Get(Guid id)
+        public async Task Add(Story story)
         {
-            throw new NotImplementedException();
+            var collection = _database.GetCollection<Story>("Stories");
+            await collection.InsertOneAsync(story);
         }
 
-        public void Update(Story story)
+        public Task<Story> Get(Guid id)
+        {
+            var collection = _database.GetCollection<Story>("Stories");
+            return collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Task Update(Story story)
         {
             throw new NotImplementedException();
         }

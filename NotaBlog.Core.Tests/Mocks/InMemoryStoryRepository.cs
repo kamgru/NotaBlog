@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using NotaBlog.Core.Entities;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NotaBlog.Core.Tests.Mocks
 {
@@ -12,22 +13,24 @@ namespace NotaBlog.Core.Tests.Mocks
         public List<Story> Stories { get; set; } = new List<Story>();
         public bool UpdateWasCalled { get; private set; }
 
-        public void Add(Story story)
+        public Task Add(Story story)
         {
             Stories.Add(story);
+            return Task.FromResult(0);
         }
 
-        public Story Get(Guid id)
+        public Task<Story> Get(Guid id)
         {
-            return Stories.FirstOrDefault(item => item.Id == id);
+            return Task.FromResult(Stories.FirstOrDefault(item => item.Id == id));
         }
 
-        public void Update(Story story)
+        public Task Update(Story story)
         {
             var oldStory = Stories.FirstOrDefault(item => item.Id == story.Id);
             Stories.Remove(oldStory);
             Stories.Add(story);
             UpdateWasCalled = true;
+            return Task.FromResult(0);
         }
     }
 }

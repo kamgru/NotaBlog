@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NotaBlog.Core.Repositories
 {
     public interface IStoryRepository
     {
-        void Add(Story story);
-        Story Get(Guid id);
-        void Update(Story story);
+        Task Add(Story story);
+        Task<Story> Get(Guid id);
+        Task Update(Story story);
     }
 }
