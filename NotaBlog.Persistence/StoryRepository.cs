@@ -3,6 +3,8 @@ using System;
 using NotaBlog.Core.Entities;
 using MongoDB.Driver;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace NotaBlog.Persistence
 {
@@ -23,6 +25,11 @@ namespace NotaBlog.Persistence
         public Task<Story> Get(Guid id)
         {
             return GetCollection().Find(x => x.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
+        {
+            return await GetCollection().Find(predicate).ToListAsync();
         }
 
         public async Task Update(Story story)

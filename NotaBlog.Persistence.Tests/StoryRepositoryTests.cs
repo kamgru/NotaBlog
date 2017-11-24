@@ -4,6 +4,7 @@ using NotaBlog.Core.Entities;
 using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace NotaBlog.Persistence.Tests
@@ -92,6 +93,22 @@ namespace NotaBlog.Persistence.Tests
             var result = repository.Get(story.Id).Result;
             result.Should().BeEquivalentTo(story, x => x.Excluding(p => p.Created));
             result.Created.Should().BeCloseTo(story.Created);
+        }
+
+        [Fact]
+        public void TestGetMultiple()
+        {
+            var database = new MongoClient(ConnectionString)
+                .GetDatabase(Database);
+            database.DropCollection(Collection);
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
+
+            var repository = new StoryRepository(database);
+
+            repository.Get(x => x.Id != Guid.Empty).Result.Should().HaveCount(3);
+            repository.Get(x => x.Title == "title").Result.Should().HaveCount(2);
         }
     }
 }

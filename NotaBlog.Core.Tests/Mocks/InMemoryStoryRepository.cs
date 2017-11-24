@@ -5,6 +5,7 @@ using System.Text;
 using NotaBlog.Core.Entities;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace NotaBlog.Core.Tests.Mocks
 {
@@ -22,6 +23,11 @@ namespace NotaBlog.Core.Tests.Mocks
         public Task<Story> Get(Guid id)
         {
             return Task.FromResult(Stories.FirstOrDefault(item => item.Id == id));
+        }
+
+        public Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
 
         public Task Update(Story story)
