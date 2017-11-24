@@ -17,19 +17,22 @@ namespace NotaBlog.Persistence
 
         public async Task Add(Story story)
         {
-            var collection = _database.GetCollection<Story>("Stories");
-            await collection.InsertOneAsync(story);
+            await GetCollection().InsertOneAsync(story);
         }
 
         public Task<Story> Get(Guid id)
         {
-            var collection = _database.GetCollection<Story>("Stories");
-            return collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+            return GetCollection().Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task Update(Story story)
+        public async Task Update(Story story)
         {
-            throw new NotImplementedException();
+            await GetCollection().ReplaceOneAsync(x => x.Id == story.Id, story);
+        }
+
+        private IMongoCollection<Story> GetCollection()
+        {
+            return _database.GetCollection<Story>("Stories"); 
         }
     }
 }

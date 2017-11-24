@@ -65,5 +65,33 @@ namespace NotaBlog.Persistence.Tests
             result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created));
             result.Created.Should().BeCloseTo(story.Created);
         }
+
+        [Fact]
+        public void TestUpdateStory()
+        {
+            var story = new Story
+            {
+                Id = Guid.NewGuid(),
+                Content = "content",
+                Title = "title",
+                Created = DateTime.UtcNow,
+                PublicationStatus = PublicationStatus.Published
+            };
+
+            var database = new MongoClient(ConnectionString)
+                .GetDatabase(Database);
+            database.DropCollection(Collection);
+            database.GetCollection<Story>(Collection).InsertOne(story);
+
+            story.Content = "updated content";
+            story.Title = "updated title";
+
+            var repository = new StoryRepository(database);
+            repository.Update(story).Wait();
+
+            var result = repository.Get(story.Id).Result;
+            result.Should().BeEquivalentTo(story, x => x.Excluding(p => p.Created));
+            result.Created.Should().BeCloseTo(story.Created);
+        }
     }
 }
