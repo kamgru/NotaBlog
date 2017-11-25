@@ -30,6 +30,11 @@ namespace NotaBlog.Core.Tests.Mocks
             throw new NotImplementedException();
         }
 
+        public Task<PaginatedResult<Story>> Get(int page, int count, Expression<Func<Story, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task Update(Story story)
         {
             var oldStory = Stories.FirstOrDefault(item => item.Id == story.Id);
