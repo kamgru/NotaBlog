@@ -4,6 +4,7 @@ using NotaBlog.Core.Repositories;
 using NotaBlog.Core.Services;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NotaBlog.Core.Commands
 {
@@ -19,13 +20,13 @@ namespace NotaBlog.Core.Commands
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public CommandValidationResult Handle(CreateStory command)
+        public async Task<CommandValidationResult> Handle(CreateStory command)
         {
             var story = new StoryFactory(_dateTimeProvider).CreateNew(command.EntityId);
             story.Title = command.Title;
             story.Content = command.Content;
 
-            _storyRepository.Add(story);
+            await _storyRepository.Add(story);
 
             return new CommandValidationResult();
         }

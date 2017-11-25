@@ -22,7 +22,7 @@ namespace NotaBlog.Api
                 Content = content
             };
 
-            var validationResult = _createStoryHandler.Handle(command);
+            var validationResult = await _createStoryHandler.Handle(command);
 
             return new CreateStoryResult
             {

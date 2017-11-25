@@ -3,6 +3,7 @@ using NotaBlog.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NotaBlog.Core.Commands
 {
@@ -15,7 +16,7 @@ namespace NotaBlog.Core.Commands
             _storyRepository = storyRepository;
         }
 
-        public CommandValidationResult Handle(PublishStory command)
+        public async Task<CommandValidationResult> Handle(PublishStory command)
         {
             var story = _storyRepository.Get(command.EntityId).Result;
 
@@ -26,7 +27,7 @@ namespace NotaBlog.Core.Commands
 
             story.PublicationStatus = PublicationStatus.Published;
 
-            _storyRepository.Update(story);
+            await _storyRepository.Update(story);
 
             return new CommandValidationResult();
         }

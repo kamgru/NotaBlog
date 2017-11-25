@@ -1,7 +1,9 @@
-﻿namespace NotaBlog.Core.Commands
+﻿using System.Threading.Tasks;
+
+namespace NotaBlog.Core.Commands
 {
     public interface ICommandHandler<TCommand> where TCommand : ICommand
     {
-        CommandValidationResult Handle(TCommand command);
+        Task<CommandValidationResult> Handle(TCommand command);
     }
 }

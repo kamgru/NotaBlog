@@ -19,7 +19,7 @@ namespace NotaBlog.Core.Tests
             var result = commandHandler.Handle(new PublishStory
             {
                 EntityId = Guid.NewGuid()
-            });
+            }).Result;
 
             result.Success.Should().BeFalse();
         }
@@ -44,7 +44,7 @@ namespace NotaBlog.Core.Tests
             var result = commandHandler.Handle(new PublishStory
             {
                 EntityId = story.Id
-            });
+            }).Result;
 
             result.Success.Should().BeFalse();
         }
@@ -69,7 +69,7 @@ namespace NotaBlog.Core.Tests
             var result = commandHandler.Handle(new PublishStory
             {
                 EntityId = story.Id
-            });
+            }).Result;
 
             result.Success.Should().BeFalse();
         }
@@ -97,7 +97,7 @@ namespace NotaBlog.Core.Tests
             var result = commandHandler.Handle(new PublishStory
             {
                 EntityId = story.Id
-            });
+            }).Result;
 
             result.Success.Should().BeFalse();
         }
