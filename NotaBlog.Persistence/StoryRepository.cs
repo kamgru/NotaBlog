@@ -29,7 +29,23 @@ namespace NotaBlog.Persistence
 
         public async Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
         {
-            return await GetCollection().Find(predicate).ToListAsync();
+            return await GetCollection()
+                .Find(predicate)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedResult<Story>> Get(int page, int count, Expression<Func<Story, bool>> predicate)
+        {
+            var stories = GetCollection()
+                .Find(predicate);
+
+            return new PaginatedResult<Story>
+            {
+                TotalCount = await stories.CountAsync(),
+                Items = await stories.Skip((page - 1) * count)
+                                .Limit(count)
+                                .ToListAsync()
+            };
         }
 
         public async Task Update(Story story)

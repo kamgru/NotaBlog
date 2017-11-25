@@ -5,6 +5,7 @@ using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace NotaBlog.Persistence.Tests
@@ -109,6 +110,27 @@ namespace NotaBlog.Persistence.Tests
 
             repository.Get(x => x.Id != Guid.Empty).Result.Should().HaveCount(3);
             repository.Get(x => x.Title == "title").Result.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void TestGetPaginated()
+        {
+            var database = new MongoClient(ConnectionString)
+                .GetDatabase(Database);
+            database.DropCollection(Collection);
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
+            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
+
+
+            var repository = new StoryRepository(database);
+            Expression<Func<Story, bool>> query = x => x.Id != Guid.Empty;
+
+            var result = repository.Get(1, 2, query).Result;
+            result.TotalCount.Should().Be(5);
+            result.Items.Should().HaveCount(2);
         }
     }
 }
