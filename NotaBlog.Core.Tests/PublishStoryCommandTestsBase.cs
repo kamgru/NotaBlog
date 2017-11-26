@@ -10,7 +10,7 @@ namespace NotaBlog.Core.Tests
         protected PublishStoryHandler Handler(IStoryRepository repository = null, IDateTimeProvider dateTimeProvider = null)
         {
             repository = repository ?? new InMemoryStoryRepository();
-            dateTimeProvider = dateTimeProvider ?? new DateTimeProvider();
+            dateTimeProvider = dateTimeProvider ?? new Mocks.DateTimeProvider();
             return new PublishStoryHandler(repository, dateTimeProvider);
         }
     }
