@@ -15,6 +15,7 @@ using NotaBlog.Api;
 using NotaBlog.Core.Commands;
 using NotaBlog.Persistence;
 using MongoDB.Driver;
+using NotaBlog.Core.Services;
 
 namespace NotaBlog.Website
 {
@@ -48,12 +49,12 @@ namespace NotaBlog.Website
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.AddSingleton<IEmailSender, EmailSender>();
 
+            services.AddTransient<IDateTimeProvider>(dateTimeProvider => new DateTimeProvider());
             services.AddTransient<CreateStoryHandler>();
             services.AddTransient<PublishStoryHandler>();
-            services.AddTransient(storyRepository => new StoryRepository(
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
                 new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog")));
-
-
+            services.AddTransient<StoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
