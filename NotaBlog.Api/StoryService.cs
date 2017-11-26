@@ -72,5 +72,27 @@ namespace NotaBlog.Api
                 Created = story.Created
             };
         }
+
+        public async Task<IEnumerable<StoryViewModel>> GetLatestStories(int count)
+        {
+            var filter = new StoryFilter
+            {
+                Page = 1,
+                Count = count,
+                Predicate = story => story.PublicationStatus == PublicationStatus.Published,
+                SortBy = story => story.Published,
+                DescendingOrder = true
+            };
+
+            var stories = await _storyRepository.Get(filter);
+
+            return stories.Items.Select(item => new StoryViewModel
+            {
+                Id = item.Id,
+                Title = item.Title,
+                Content = item.Content,
+                Published = item.Published.Value
+            });
+        }
     }
 }
