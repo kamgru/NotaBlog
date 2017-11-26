@@ -13,6 +13,6 @@ namespace NotaBlog.Core.Repositories
         Task<Story> Get(Guid id);
         Task Update(Story story);
         Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate);
-        Task<PaginatedResult<Story>> Get(int page, int count, Expression<Func<Story, bool>> predicate);
+        Task<PaginatedResult<Story>> Get(StoryFilter filter);
     }
 }

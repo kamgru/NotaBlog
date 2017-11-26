@@ -6,6 +6,7 @@ using NotaBlog.Core.Repositories;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NotaBlog.Persistence.Tests
@@ -113,6 +114,25 @@ namespace NotaBlog.Persistence.Tests
         }
 
         [Fact]
+        public void WhenFilterNull_ItShouldThrowException()
+        {
+            var repository = new StoryRepository(new MongoClient(ConnectionString).GetDatabase(Database));
+            Func<Task> test = async () => await repository.Get(filter: null);
+            test.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void WhenPredicateNull_ItShouldReturnEmptyResult()
+        {
+            var repository = new StoryRepository(new MongoClient(ConnectionString).GetDatabase(Database));
+
+            var result = repository.Get(new StoryFilter()).Result;
+
+            result.TotalCount.Should().Be(0);
+            result.Items.Should().BeEmpty();
+        }
+
+        [Fact]
         public void TestGetPaginated()
         {
             var database = new MongoClient(ConnectionString)
@@ -126,9 +146,15 @@ namespace NotaBlog.Persistence.Tests
 
 
             var repository = new StoryRepository(database);
-            Expression<Func<Story, bool>> query = x => x.Id != Guid.Empty;
 
-            var result = repository.Get(1, 2, query).Result;
+            var filter = new StoryFilter
+            {
+                Page = 1,
+                Count = 2,
+                Predicate = story => story.Id != Guid.Empty
+            };
+
+            var result = repository.Get(filter).Result;
             result.TotalCount.Should().Be(5);
             result.Items.Should().HaveCount(2);
         }

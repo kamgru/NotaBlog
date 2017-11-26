@@ -7,6 +7,6 @@ namespace NotaBlog.Core.Repositories
     public class PaginatedResult<TEntity>
     {
         public long TotalCount { get; set; }
-        public IEnumerable<TEntity> Items { get; set; }
+        public IEnumerable<TEntity> Items { get; set; } = new List<TEntity>();
     }
 }

@@ -30,7 +30,7 @@ namespace NotaBlog.Core.Tests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<PaginatedResult<Story>> Get(int page, int count, Expression<Func<Story, bool>> predicate)
+        public Task<PaginatedResult<Story>> Get(StoryFilter filter)
         {
             throw new NotImplementedException();
         }

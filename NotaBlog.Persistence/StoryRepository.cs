@@ -34,17 +34,37 @@ namespace NotaBlog.Persistence
                 .ToListAsync();
         }
 
-        public async Task<PaginatedResult<Story>> Get(int page, int count, Expression<Func<Story, bool>> predicate)
+        public async Task<PaginatedResult<Story>> Get(StoryFilter filter)
         {
+            if (filter == null)
+            {
+                throw new ArgumentNullException(nameof(filter));
+            }
+
+            if (filter.Predicate == null)
+            {
+                return new PaginatedResult<Story>();
+            }
+
             var stories = GetCollection()
-                .Find(predicate);
+                .Find(filter.Predicate);
+
+            if (filter.SortBy != null)
+            {
+                stories = filter.DescendingOrder
+                    ? stories.SortByDescending(filter.SortBy)
+                    : stories.SortBy(filter.SortBy);
+            }
+
+            var count = await stories.CountAsync();
+            var items = await stories.Skip((filter.Page - 1) * filter.Count)
+                .Limit(filter.Count)
+                .ToListAsync();
 
             return new PaginatedResult<Story>
             {
-                TotalCount = await stories.CountAsync(),
-                Items = await stories.Skip((page - 1) * count)
-                                .Limit(count)
-                                .ToListAsync()
+                TotalCount = count,
+                Items = items
             };
         }
 
