@@ -91,7 +91,9 @@ namespace NotaBlog.Api
                 Id = item.Id,
                 Title = item.Title,
                 Content = item.Content,
-                Published = item.Published.Value
+                Published = item.Published.Value,
+                Created = item.Created,
+                PublicationStatus = item.PublicationStatus
             });
         }
     }
