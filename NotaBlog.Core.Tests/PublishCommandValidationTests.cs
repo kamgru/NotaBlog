@@ -9,17 +9,17 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class PublishCommandValidationTests
+    public class PublishCommandValidationTests : PublishStoryCommandTestsBase
     {
         [Fact]
         public void WhenStoryNotFound_ItShouldFail()
         {
-            var commandHandler = new PublishStoryHandler(new InMemoryStoryRepository(), new DateTimeProvider());
-            
-            var result = commandHandler.Handle(new PublishStory
-            {
-                EntityId = Guid.NewGuid()
-            }).Result;
+            var result = Handler()
+                .Handle(new PublishStory
+                {
+                    EntityId = Guid.NewGuid()
+                })
+                .Result;
 
             result.Success.Should().BeFalse();
         }
@@ -39,12 +39,12 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
-
-            var result = commandHandler.Handle(new PublishStory
-            {
-                EntityId = story.Id
-            }).Result;
+            var result = Handler(repository)
+                .Handle(new PublishStory
+                {
+                    EntityId = story.Id
+                })
+                .Result;
 
             result.Success.Should().BeFalse();
         }
@@ -64,12 +64,12 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
-
-            var result = commandHandler.Handle(new PublishStory
-            {
-                EntityId = story.Id
-            }).Result;
+            var result = Handler(repository)
+                .Handle(new PublishStory
+                {
+                    EntityId = story.Id
+                })
+                .Result;
 
             result.Success.Should().BeFalse();
         }
@@ -92,12 +92,12 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
-
-            var result = commandHandler.Handle(new PublishStory
-            {
-                EntityId = story.Id
-            }).Result;
+            var result = Handler(repository)
+                .Handle(new PublishStory
+                {
+                    EntityId = story.Id
+                })
+                .Result;
 
             result.Success.Should().BeFalse();
         }

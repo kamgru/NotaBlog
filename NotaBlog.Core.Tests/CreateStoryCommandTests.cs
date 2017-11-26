@@ -9,21 +9,20 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class CreateStoryCommandTests
+    public class CreateStoryCommandTests : CreateStoryCommandTestsBase
     {
-        private readonly DateTimeProvider _dateTimeProvider = new DateTimeProvider { DateTimeNow = DateTime.Now };
-
         [Fact]
         public void GivenValidCommand_WhenCreatingStory_ItShouldSetGuid()
         {
-            var repository = new InMemoryStoryRepository();
-            var commandHandler = new CreateStoryHandler(repository, _dateTimeProvider);
             var expectedId = Guid.NewGuid();
+            var repository = new InMemoryStoryRepository();
 
-            commandHandler.Handle(new CreateStory
-            {
-                EntityId = expectedId
-            });
+            Handler(repository)
+                .Handle(new CreateStory
+                {
+                    EntityId = expectedId
+                })
+                .Wait();
 
             repository.Stories.First().Id.ShouldBeEquivalentTo(expectedId);
         }
@@ -32,14 +31,15 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenCreatingStory_ItShouldSetTitle()
         {
             var repository = new InMemoryStoryRepository();
-            var commandHandler = new CreateStoryHandler(repository, _dateTimeProvider);
             var expectedTitle = "my test title";
 
-            commandHandler.Handle(new CreateStory
-            {
-                EntityId = Guid.NewGuid(),
-                Title = expectedTitle
-            });
+            Handler(repository)
+                .Handle(new CreateStory
+                {
+                    EntityId = Guid.NewGuid(),
+                    Title = expectedTitle
+                })
+                .Wait();
 
             repository.Stories.First().Title.ShouldBeEquivalentTo(expectedTitle);
         }
@@ -48,15 +48,16 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenCreatingStory_ItShouldSetContent()
         {
             var repository = new InMemoryStoryRepository();
-            var commandHandler = new CreateStoryHandler(repository, _dateTimeProvider);
             var expectedContent = "my test content";
 
-            commandHandler.Handle(new CreateStory
-            {
-                EntityId = Guid.NewGuid(),
-                Title = "title",
-                Content = expectedContent
-            });
+            Handler(repository)
+                .Handle(new CreateStory
+                {
+                    EntityId = Guid.NewGuid(),
+                    Title = "title",
+                    Content = expectedContent
+                })
+                .Wait();
 
             repository.Stories.First().Content.ShouldBeEquivalentTo(expectedContent);
         }
@@ -65,9 +66,10 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenStoryCreated_ItShouldBeAddedToRepository()
         {
             var repository = new InMemoryStoryRepository();
-            var commandHandler = new CreateStoryHandler(repository, _dateTimeProvider);
 
-            commandHandler.Handle(new CreateStory());
+            Handler(repository)
+                .Handle(new CreateStory())
+                .Wait();
 
             repository.Stories.Should().HaveCount(1);
         }

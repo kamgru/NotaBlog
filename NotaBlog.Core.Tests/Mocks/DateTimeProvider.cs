@@ -7,7 +7,7 @@ namespace NotaBlog.Core.Tests.Mocks
 {
     class DateTimeProvider : IDateTimeProvider
     {
-        public DateTime DateTimeNow { get; set; }
+        public DateTime DateTimeNow { get; set; } = DateTime.Now;
 
         public DateTime Now()
         {

@@ -9,10 +9,8 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class PublishStoryCommandTests
+    public class PublishStoryCommandTests : PublishStoryCommandTestsBase
     {
-        private readonly DateTimeProvider _dateTimeProvider = new DateTimeProvider();
-
         [Fact]
         public void GivenValidCommand_WhenPublishingStory_ItShouldSetPublicationStatusToPublished()
         {
@@ -25,11 +23,12 @@ namespace NotaBlog.Core.Tests
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
-            new PublishStoryHandler(repository, _dateTimeProvider)
+            Handler(repository)
                 .Handle(new PublishStory
                 {
                     EntityId = story.Id
-                }).Wait();
+                })
+                .Wait();
 
             story.PublicationStatus.ShouldBeEquivalentTo(PublicationStatus.Published);
         }
@@ -46,11 +45,12 @@ namespace NotaBlog.Core.Tests
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
-            new PublishStoryHandler(repository, _dateTimeProvider)
+            Handler(repository)
                 .Handle(new PublishStory
                 {
                     EntityId = story.Id
-                }).Wait();
+                })
+                .Wait();
 
             repository.UpdateWasCalled.Should().BeTrue();
         }
@@ -68,15 +68,19 @@ namespace NotaBlog.Core.Tests
             };
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };
-            _dateTimeProvider.DateTimeNow = DateTime.Parse("2016-12-16 12:45");
+            var dateTimeProvider = new DateTimeProvider
+            {
+                DateTimeNow = DateTime.Parse("2016-12-16 12:45")
+            };
 
-            new PublishStoryHandler(repository, _dateTimeProvider)
+            Handler(repository, dateTimeProvider)
                 .Handle(new PublishStory
                 {
                     EntityId = story.Id
-                }).Wait();
+                })
+                .Wait();
 
-            story.Published.Should().BeCloseTo(_dateTimeProvider.DateTimeNow);
+            story.Published.Should().BeCloseTo(dateTimeProvider.DateTimeNow);
         }
     }
 }

@@ -11,16 +11,17 @@ namespace NotaBlog.Core.Commands
     public class PublishStoryHandler : ICommandHandler<PublishStory>
     {
         private readonly IStoryRepository _storyRepository;
-        private readonly IDateTimeProvider dateTimeProvider;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public PublishStoryHandler(IStoryRepository storyRepository, IDateTimeProvider dateTimeProvider)
         {
-            this.dateTimeProvider = dateTimeProvider;
+            _dateTimeProvider = dateTimeProvider;
+            _storyRepository = storyRepository;
         }
 
         public async Task<CommandValidationResult> Handle(PublishStory command)
         {
-            var story = _storyRepository.Get(command.EntityId).Result;
+            var story = await _storyRepository.Get(command.EntityId);
 
             if (!IsValid(command, story, out IEnumerable<string> errors))
             {
