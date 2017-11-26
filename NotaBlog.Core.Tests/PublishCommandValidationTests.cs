@@ -14,7 +14,7 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryNotFound_ItShouldFail()
         {
-            var commandHandler = new PublishStoryHandler(new InMemoryStoryRepository());
+            var commandHandler = new PublishStoryHandler(new InMemoryStoryRepository(), new DateTimeProvider());
             
             var result = commandHandler.Handle(new PublishStory
             {
@@ -39,7 +39,7 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository);
+            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
 
             var result = commandHandler.Handle(new PublishStory
             {
@@ -64,7 +64,7 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository);
+            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
 
             var result = commandHandler.Handle(new PublishStory
             {
@@ -92,7 +92,7 @@ namespace NotaBlog.Core.Tests
                 Stories = new List<Story> { story }
             };
 
-            var commandHandler = new PublishStoryHandler(repository);
+            var commandHandler = new PublishStoryHandler(repository, new DateTimeProvider());
 
             var result = commandHandler.Handle(new PublishStory
             {

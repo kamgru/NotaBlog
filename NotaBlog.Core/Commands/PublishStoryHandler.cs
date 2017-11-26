@@ -1,5 +1,6 @@
 ﻿using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
+using NotaBlog.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace NotaBlog.Core.Commands
     public class PublishStoryHandler : ICommandHandler<PublishStory>
     {
         private readonly IStoryRepository _storyRepository;
+        private readonly IDateTimeProvider dateTimeProvider;
 
-        public PublishStoryHandler(IStoryRepository storyRepository)
+        public PublishStoryHandler(IStoryRepository storyRepository, IDateTimeProvider dateTimeProvider)
         {
-            _storyRepository = storyRepository;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<CommandValidationResult> Handle(PublishStory command)
