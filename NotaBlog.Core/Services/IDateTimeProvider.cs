@@ -8,4 +8,12 @@ namespace NotaBlog.Core.Services
     {
         DateTime Now();
     }
+
+    public class DateTimeProvider : IDateTimeProvider
+    {
+        public DateTime Now()
+        {
+            return DateTime.Now;
+        }
+    }
 }
