@@ -96,5 +96,10 @@ namespace NotaBlog.Api
                 PublicationStatus = item.PublicationStatus
             });
         }
+
+        public async Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
+        {
+            return null;
+        }
     }
 }

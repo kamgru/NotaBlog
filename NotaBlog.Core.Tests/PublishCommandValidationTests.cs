@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Text;

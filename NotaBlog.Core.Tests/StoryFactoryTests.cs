@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NotaBlog.Core.Entities;
 using NotaBlog.Core.Factories;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using Xunit;
 
@@ -9,7 +9,7 @@ namespace NotaBlog.Core.Tests
 {
     public class StoryFactoryTests
     {
-        private readonly DateTimeProvider _timeProvider = new DateTimeProvider();
+        private readonly MockDateTimeProvider _timeProvider = new MockDateTimeProvider();
 
         [Fact]
         public void WhenCreatingStory_ItShouldHaveStatusSetToDraft()

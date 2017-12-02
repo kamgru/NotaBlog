@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -68,7 +68,7 @@ namespace NotaBlog.Core.Tests
             };
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };
-            var dateTimeProvider = new DateTimeProvider
+            var dateTimeProvider = new MockDateTimeProvider
             {
                 DateTimeNow = DateTime.Parse("2016-12-16 12:45")
             };

@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Tests.Common.Mocks;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace NotaBlog.Core.Tests

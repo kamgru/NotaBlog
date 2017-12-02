@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace NotaBlog.Core.Tests.Mocks
+namespace NotaBlog.Tests.Common.Mocks
 {
-    class InMemoryStoryRepository : IStoryRepository
+    public class InMemoryStoryRepository : IStoryRepository
     {
         public List<Story> Stories { get; set; } = new List<Story>();
         public bool UpdateWasCalled { get; private set; }

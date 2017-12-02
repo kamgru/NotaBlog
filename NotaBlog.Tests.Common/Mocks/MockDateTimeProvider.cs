@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NotaBlog.Core.Tests.Mocks
+namespace NotaBlog.Tests.Common.Mocks
 {
-    class DateTimeProvider : IDateTimeProvider
+    public class MockDateTimeProvider : IDateTimeProvider
     {
         public DateTime DateTimeNow { get; set; } = DateTime.Now;
 
