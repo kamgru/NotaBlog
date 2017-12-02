@@ -1,5 +1,4 @@
-﻿using NotaBlog.Core.Commands;
-using NotaBlog.Core.Entities;
+﻿using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
 using System;
 using System.Collections;
@@ -11,48 +10,11 @@ namespace NotaBlog.Api
 {
     public class StoryService
     {
-        private readonly CreateStoryHandler _createStoryHandler;
-        private readonly PublishStoryHandler _publishStoryHandler;
         private readonly IStoryRepository _storyRepository;
 
-        public StoryService(CreateStoryHandler createStoryHandler, PublishStoryHandler publishStoryHandler,
-            IStoryRepository storyRepository)
+        public StoryService(IStoryRepository storyRepository)
         {
-            _createStoryHandler = createStoryHandler;
-            _publishStoryHandler = publishStoryHandler;
             _storyRepository = storyRepository;
-        }
-
-        public async Task<CreateStoryResult> CreateStory(string title, string content)
-        {
-            var command = new CreateStory
-            {
-                EntityId = Guid.NewGuid(),
-                Title = title,
-                Content = content
-            };
-
-            var validationResult = await _createStoryHandler.Handle(command);
-
-            return new CreateStoryResult
-            {
-                Success = validationResult.Success,
-                StoryId = command.EntityId
-            };
-        }
-
-        public async Task<PublishStoryResult> PublishStory(Guid storyId)
-        {
-            var validationResult = await _publishStoryHandler.Handle(new PublishStory
-            {
-                EntityId = storyId
-            });
-
-            return new PublishStoryResult
-            {
-                StoryId = storyId,
-                Success = validationResult.Success
-            };
         }
 
         public async Task<StoryViewModel> GetStory(Guid id)
@@ -97,9 +59,9 @@ namespace NotaBlog.Api
             });
         }
 
-        public async Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
+        public Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }
