@@ -7,6 +7,8 @@ namespace NotaBlog.Core.Tests
 {
     public class PublishStoryCommandTestsBase
     {
+        protected readonly IDateTimeProvider _dateTimeProvider = new MockDateTimeProvider();
+
         protected PublishStoryHandler Handler(IStoryRepository repository = null, IDateTimeProvider dateTimeProvider = null)
         {
             repository = repository ?? new InMemoryStoryRepository();

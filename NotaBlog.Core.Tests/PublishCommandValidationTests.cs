@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Entities;
+using NotaBlog.Core.Services;
 using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,9 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryTitleIsEmpty_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = string.Empty,
-                Content = "content"
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Title = "";
+            story.Content = "content";
 
             var repository = new InMemoryStoryRepository
             {
@@ -52,12 +50,9 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryContentIsEmpty_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "my title",
-                Content = string.Empty
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Title = "title";
+            story.Content = "";
 
             var repository = new InMemoryStoryRepository
             {
@@ -77,13 +72,10 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryHasPublicationStatusSetToPublished_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "my title",
-                Content = "content",
-            };
-            story.Publish(new MockDateTimeProvider());
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Title = "my title";
+            story.Content = "my content";
+            story.Publish(_dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {

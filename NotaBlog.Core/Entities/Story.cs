@@ -7,10 +7,10 @@ namespace NotaBlog.Core.Entities
 {
     public class Story
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public PublicationStatus PublicationStatus { get; private set; }
         public DateTime Created { get; private set; }
-        public DateTime? Published { get; set; }
+        public DateTime? Published { get; private set; }
         public string Title { get; set; }
         public string Content { get; set; }
 
