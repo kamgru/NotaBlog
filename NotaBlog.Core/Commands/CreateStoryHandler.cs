@@ -1,6 +1,7 @@
 ﻿using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
 using NotaBlog.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,15 @@ namespace NotaBlog.Core.Commands
 
         public async Task<CommandValidationResult> Handle(CreateStory command)
         {
+            if (command.EntityId == Guid.Empty)
+            {
+                return new CommandValidationResult
+                {
+                    Errors = new[] { "EntityId not set" }
+                };
+            }
+
             var story = Story.CreateNew(command.EntityId, _dateTimeProvider);
-            story.Title = command.Title;
-            story.Content = command.Content;
 
             await _storyRepository.Add(story);
 

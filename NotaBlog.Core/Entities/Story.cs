@@ -11,8 +11,9 @@ namespace NotaBlog.Core.Entities
         public PublicationStatus PublicationStatus { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Published { get; private set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public DateTime? Updated { get; private set; }
+        public string Title { get; private set; }
+        public string Content { get; private set; }
 
         public static Story CreateNew(Guid id, IDateTimeProvider dateTimeProvider)
         {
@@ -28,6 +29,13 @@ namespace NotaBlog.Core.Entities
         {
             PublicationStatus = PublicationStatus.Published;
             Published = dateTimeProvider.Now();
+        }
+
+        public void Update(string title, string content, IDateTimeProvider dateTimeProvider)
+        {
+            Title = title;
+            Content = content;
+            Updated = dateTimeProvider.Now();
         }
     }
 

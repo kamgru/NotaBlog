@@ -15,8 +15,7 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenPublishingStory_ItShouldSetPublicationStatusToPublished()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "my title";
-            story.Content = "my content";
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -34,8 +33,7 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenStoryPublished_ItShouldBeUpdatedInRepository()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "my title";
-            story.Content = "my content";
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -53,8 +51,7 @@ namespace NotaBlog.Core.Tests
         public void GivenValidCommand_WhenStoryPublished_ItShouldSetPublishedDate()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "my title";
-            story.Content = "my content";
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };
             var dateTimeProvider = new MockDateTimeProvider

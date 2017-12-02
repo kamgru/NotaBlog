@@ -29,8 +29,7 @@ namespace NotaBlog.Core.Tests
         public void WhenStoryTitleIsEmpty_ItShouldFail()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "";
-            story.Content = "content";
+            story.Update("", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {
@@ -51,8 +50,7 @@ namespace NotaBlog.Core.Tests
         public void WhenStoryContentIsEmpty_ItShouldFail()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "title";
-            story.Content = "";
+            story.Update("title", "", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {
@@ -73,8 +71,7 @@ namespace NotaBlog.Core.Tests
         public void WhenStoryHasPublicationStatusSetToPublished_ItShouldFail()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.Title = "my title";
-            story.Content = "my content";
+            story.Update("title", "content", _dateTimeProvider);
             story.Publish(_dateTimeProvider);
 
             var repository = new InMemoryStoryRepository

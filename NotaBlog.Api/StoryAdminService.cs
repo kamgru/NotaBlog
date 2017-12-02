@@ -13,13 +13,11 @@ namespace NotaBlog.Api
             _commandDispatcher = commandDispatcher;
         }
 
-        public async Task<CreateStoryResult> CreateStory(string title, string content)
+        public async Task<CreateStoryResult> CreateStory()
         {
             var command = new CreateStory
             {
                 EntityId = Guid.NewGuid(),
-                Title = title,
-                Content = content
             };
 
             var validationResult = await _commandDispatcher.Submit(command);
