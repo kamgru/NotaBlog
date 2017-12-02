@@ -1,4 +1,5 @@
 using NotaBlog.Core.Repositories;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using Xunit;
 
@@ -9,15 +10,8 @@ namespace NotaBlog.Api.Tests
         [Fact]
         public void ItShouldNotReturnNull()
         {
-
+            //TODO: implement this test
+            Assert.True(false);
         }
-    }
-
-    public class StoryServiceTestsBase
-    {
-        protected StoryService StoryService(IStoryRepository repository = null)
-        {
-            return null;
-        } 
     }
 }
