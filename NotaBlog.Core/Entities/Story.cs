@@ -14,6 +14,7 @@ namespace NotaBlog.Core.Entities
         public DateTime? Updated { get; private set; }
         public string Title { get; private set; }
         public string Content { get; private set; }
+        public string SeName { get; private set; }
 
         public static Story CreateNew(Guid id, IDateTimeProvider dateTimeProvider)
         {
@@ -36,6 +37,11 @@ namespace NotaBlog.Core.Entities
             Title = title;
             Content = content;
             Updated = dateTimeProvider.Now();
+        }
+
+        public void SetSeName(string seName)
+        {
+            SeName = seName;
         }
     }
 
