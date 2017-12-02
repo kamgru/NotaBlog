@@ -1,7 +1,11 @@
+using FluentAssertions;
+using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
 using NotaBlog.Tests.Common.Mocks;
 using System;
+using System.Collections.Generic;
 using Xunit;
+using System.Collections;
 
 namespace NotaBlog.Api.Tests
 {
@@ -10,8 +14,16 @@ namespace NotaBlog.Api.Tests
         [Fact]
         public void ItShouldNotReturnNull()
         {
-            //TODO: implement this test
-            Assert.True(false);
+            var repository = new InMemoryStoryRepository
+            {
+                Stories = new List<Story>()
+            };
+
+            var storyService = new StoryService(repository);
+
+            var result = storyService.GetLatestLeads(10).Result;
+
+            result.Should().NotBeNull();
         }
     }
 }

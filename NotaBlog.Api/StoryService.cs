@@ -59,9 +59,9 @@ namespace NotaBlog.Api
             });
         }
 
-        public Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
+        public async Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
         {
-            throw new NotImplementedException();
+            return new List<StoryLeadViewModel>();
         }
     }
 }
