@@ -1,8 +1,8 @@
 using FluentAssertions;
 using MongoDB.Driver;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -20,14 +20,10 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestAddStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            story.Content = "content";
+            story.Title = "title";
+            story.PublicationStatus = PublicationStatus.Published;
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -47,14 +43,10 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestGetStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            story.Content = "content";
+            story.Title = "title";
+            story.PublicationStatus = PublicationStatus.Published;
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -72,14 +64,10 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestUpdateStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            story.Content = "content";
+            story.Title = "title";
+            story.PublicationStatus = PublicationStatus.Published;
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);

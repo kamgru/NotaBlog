@@ -1,20 +1,19 @@
 using FluentAssertions;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Factories;
 using NotaBlog.Tests.Common.Mocks;
 using System;
 using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class StoryFactoryTests
+    public class StoryCreateNewTests
     {
         private readonly MockDateTimeProvider _timeProvider = new MockDateTimeProvider();
 
         [Fact]
         public void WhenCreatingStory_ItShouldHaveStatusSetToDraft()
         {
-            var story = StoryFactory().CreateNew(Guid.NewGuid());
+            var story = Story.CreateNew(Guid.NewGuid(), _timeProvider);
             story.PublicationStatus.ShouldBeEquivalentTo(PublicationStatus.Draft);
         }
 
@@ -23,20 +22,15 @@ namespace NotaBlog.Core.Tests
         {
             _timeProvider.DateTimeNow = DateTime.Now;
 
-            var story = StoryFactory().CreateNew(Guid.NewGuid());
+            var story = Story.CreateNew(Guid.NewGuid(), _timeProvider);
             story.Created.ShouldBeEquivalentTo(_timeProvider.Now());
         }
 
         [Fact]
         public void WhenCreatingStory_ItShouldHaveNewGuid()
         {
-            var story = StoryFactory().CreateNew(Guid.NewGuid());
+            var story = Story.CreateNew(Guid.NewGuid(), _timeProvider);
             story.Id.Should().NotBe(Guid.Empty);
-        }
-
-        private StoryFactory StoryFactory()
-        {
-            return new StoryFactory(_timeProvider);
         }
     }
 }

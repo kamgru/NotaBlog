@@ -1,5 +1,4 @@
 ﻿using NotaBlog.Core.Entities;
-using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
 using NotaBlog.Core.Services;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace NotaBlog.Core.Commands
 
         public async Task<CommandValidationResult> Handle(CreateStory command)
         {
-            var story = new StoryFactory(_dateTimeProvider).CreateNew(command.EntityId);
+            var story = Story.CreateNew(command.EntityId, _dateTimeProvider);
             story.Title = command.Title;
             story.Content = command.Content;
 

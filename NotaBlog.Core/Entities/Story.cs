@@ -9,10 +9,20 @@ namespace NotaBlog.Core.Entities
     {
         public Guid Id { get; set; }
         public PublicationStatus PublicationStatus { get; set; }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; private set; }
         public DateTime? Published { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+
+        public static Story CreateNew(Guid id, IDateTimeProvider dateTimeProvider)
+        {
+            return new Story
+            {
+                Id = id,
+                Created = dateTimeProvider.Now(),
+                PublicationStatus = PublicationStatus.Draft
+            };
+        }
     }
 
     public enum PublicationStatus
