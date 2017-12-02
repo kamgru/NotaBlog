@@ -8,6 +8,11 @@ namespace NotaBlog.Api
     {
         private readonly ICommandDispatcher _commandDispatcher;
 
+        public StoryAdminService(ICommandDispatcher commandDispatcher)
+        {
+            _commandDispatcher = commandDispatcher;
+        }
+
         public async Task<CreateStoryResult> CreateStory(string title, string content)
         {
             var command = new CreateStory
