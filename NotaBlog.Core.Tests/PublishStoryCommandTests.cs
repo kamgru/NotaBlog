@@ -63,8 +63,6 @@ namespace NotaBlog.Core.Tests
                 Id = Guid.NewGuid(),
                 Title = "title",
                 Content = "content",
-                Published = null,
-                PublicationStatus = PublicationStatus.Draft
             };
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };

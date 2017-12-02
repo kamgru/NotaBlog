@@ -8,7 +8,7 @@ namespace NotaBlog.Core.Entities
     public class Story
     {
         public Guid Id { get; set; }
-        public PublicationStatus PublicationStatus { get; set; }
+        public PublicationStatus PublicationStatus { get; private set; }
         public DateTime Created { get; private set; }
         public DateTime? Published { get; set; }
         public string Title { get; set; }
@@ -22,6 +22,12 @@ namespace NotaBlog.Core.Entities
                 Created = dateTimeProvider.Now(),
                 PublicationStatus = PublicationStatus.Draft
             };
+        }
+
+        public void Publish(IDateTimeProvider dateTimeProvider)
+        {
+            PublicationStatus = PublicationStatus.Published;
+            Published = dateTimeProvider.Now();
         }
     }
 

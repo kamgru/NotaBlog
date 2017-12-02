@@ -2,6 +2,7 @@ using FluentAssertions;
 using MongoDB.Driver;
 using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
+using NotaBlog.Core.Services;
 using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Linq;
@@ -17,13 +18,15 @@ namespace NotaBlog.Persistence.Tests
         private const string Database = "NotaBlog_TEST";
         private const string Collection = "Stories";
 
+        private readonly IDateTimeProvider _dateTimeProvider = new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow };
+
         [Fact]
         public void TestAddStory()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Content = "content";
             story.Title = "title";
-            story.PublicationStatus = PublicationStatus.Published;
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -36,17 +39,18 @@ namespace NotaBlog.Persistence.Tests
             var collection = database.GetCollection<Story>(Collection);
             collection.Count("{}").Should().Be(1);
             var result = collection.Find(x => x.Id == story.Id).FirstOrDefault();
-            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created).Excluding(p => p.Published));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
         }
 
         [Fact]
         public void TestGetStory()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Content = "content";
             story.Title = "title";
-            story.PublicationStatus = PublicationStatus.Published;
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -57,17 +61,18 @@ namespace NotaBlog.Persistence.Tests
                 .Get(story.Id)
                 .Result;
 
-            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created).Excluding(p => p.Published));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
         }
 
         [Fact]
         public void TestUpdateStory()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow });
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Content = "content";
             story.Title = "title";
-            story.PublicationStatus = PublicationStatus.Published;
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -81,8 +86,9 @@ namespace NotaBlog.Persistence.Tests
             repository.Update(story).Wait();
 
             var result = repository.Get(story.Id).Result;
-            result.Should().BeEquivalentTo(story, x => x.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created).Excluding(p => p.Published));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
         }
 
         [Fact]

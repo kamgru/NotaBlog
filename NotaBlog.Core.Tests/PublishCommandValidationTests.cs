@@ -74,18 +74,16 @@ namespace NotaBlog.Core.Tests
             result.Success.Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData(PublicationStatus.Published)]
-        [InlineData(PublicationStatus.Withdrawn)]
-        public void WhenStoryStatusIsNotDraft_ItShouldFail(PublicationStatus status)
+        [Fact]
+        public void WhenStoryHasPublicationStatusSetToPublished_ItShouldFail()
         {
             var story = new Story
             {
                 Id = Guid.NewGuid(),
                 Title = "my title",
                 Content = "content",
-                PublicationStatus = status
             };
+            story.Publish(new MockDateTimeProvider());
 
             var repository = new InMemoryStoryRepository
             {
