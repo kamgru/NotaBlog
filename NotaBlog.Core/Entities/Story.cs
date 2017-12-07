@@ -43,6 +43,34 @@ namespace NotaBlog.Core.Entities
         {
             SeName = seName;
         }
+
+        public string GetLeadParagraph()
+        {
+            if (string.IsNullOrEmpty(Content))
+            {
+                return string.Empty;
+            }
+
+            var (success, result) = TryGetFirstParagraph();
+            return success ? result : string.Empty;
+        }
+
+        private (bool Success, string Result) TryGetFirstParagraph()
+        {
+            var startIndex = Content.IndexOf("<p>");
+            if (startIndex == -1)
+            {
+                return (false, string.Empty);
+            }
+
+            var endIndex = Content.IndexOf("</p>");
+            if (endIndex <= startIndex)
+            {
+                return (false, string.Empty);
+            }
+
+            return (true, Content.Substring(startIndex + 3, endIndex - startIndex - 3));
+        }
     }
 
     public enum PublicationStatus

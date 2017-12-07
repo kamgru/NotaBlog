@@ -8,12 +8,12 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class StorySetSeNameTests
+    public class StorySetSeNameTests : StoryTestsBase
     {
         [Fact]
         public void ItShouldSetSeName()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider());
+            var story = CreateDefault();
             var expected = "se-name-test-url";
 
             story.SetSeName(expected);

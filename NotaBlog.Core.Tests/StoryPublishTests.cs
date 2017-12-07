@@ -8,12 +8,12 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class StoryPublishTests
+    public class StoryPublishTests : StoryTestsBase
     {
         [Fact]
         public void WhenPublished_ItShouldSetPublicationStatusToPublished()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider());
+            var story = CreateDefault();
 
             story.Publish(new MockDateTimeProvider());
 
@@ -28,7 +28,7 @@ namespace NotaBlog.Core.Tests
                 DateTimeNow = DateTime.Parse("2016-12-16 12:35:00")
             };
 
-            var story = Story.CreateNew(Guid.NewGuid(), dateTimeProvider);
+            var story = CreateDefault();
 
             story.Publish(dateTimeProvider);
 

@@ -8,14 +8,14 @@ using Xunit;
 
 namespace NotaBlog.Core.Tests
 {
-    public class StoryUpdateTests
+    public class StoryUpdateTests : StoryTestsBase
     {
         [Fact]
         public void WhenUpdating_ItShouldSetTitleAndContent()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), new MockDateTimeProvider());
+            var story = CreateDefault();
 
-            story.Update("new title", "new content", new MockDateTimeProvider());
+            story.Update("new title", "new content", _dateTimeProvider);
 
             story.Title.ShouldBeEquivalentTo("new title");
             story.Content.ShouldAllBeEquivalentTo("new content");
