@@ -27,7 +27,7 @@ namespace NotaBlog.Tests.Common.Mocks
 
         public Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Stories.Where(predicate.Compile()));
         }
 
         public Task<PaginatedResult<Story>> Get(StoryFilter filter)

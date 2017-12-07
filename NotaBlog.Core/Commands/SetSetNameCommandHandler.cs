@@ -1,6 +1,7 @@
 ﻿using NotaBlog.Core.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,15 @@ namespace NotaBlog.Core.Commands
                 return new CommandValidationResult
                 {
                     Errors = new[] { "Search engine name must not be empty" }
+                };
+            }
+
+            var existing = await _storyRepository.Get(x => x.SeName == command.SeName);
+            if (existing.Any())
+            {
+                return new CommandValidationResult
+                {
+                    Errors = new[] { "Duplicate search engine name" }
                 };
             }
 

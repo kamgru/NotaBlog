@@ -47,6 +47,25 @@ namespace NotaBlog.Core.Tests
         }
 
         [Fact]
+        public void WhenSeNameIsDuplicate_ItShouldFail()
+        {
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            var storyWithSeName = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            storyWithSeName.SetSeName("test-se-name");
+
+            var repository = new InMemoryStoryRepository { Stories = new List<Story> { story, storyWithSeName } };
+
+            Handler(repository)
+                .Handle(new SetSeName
+                {
+                    EntityId = story.Id,
+                    SeName = storyWithSeName.SeName
+                })
+                .Result.Success
+                .Should().BeFalse();
+        }
+
+        [Fact]
         public void GivenValidCommand_ItShouldSetStorySeName()
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
