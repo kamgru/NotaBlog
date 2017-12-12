@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NotaBlog.Core.Commands
 {
-    public class CreateStory : ICommand
+    public class CreateStory : IEntityCommand
     {
         public Guid EntityId { get; set; }
     }
