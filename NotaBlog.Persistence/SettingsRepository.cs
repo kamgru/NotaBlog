@@ -12,6 +12,9 @@ namespace NotaBlog.Persistence
 {
     public class SettingsRepository : ISettingsRepository
     {
+        public const string CollectionName = "Settings";
+        public const string BlogInfoKey = "BlogInfo";
+
         private readonly IMongoDatabase _database;
 
         public SettingsRepository(IMongoDatabase mongoDatabase)
@@ -21,8 +24,8 @@ namespace NotaBlog.Persistence
 
         public async Task<BlogInfo> GetBlogInfo()
         {
-            var blogInfo = await _database.GetCollection<Setting>("Settings")
-                .Find(x => x.Key == "blogInfo")
+            var blogInfo = await _database.GetCollection<Setting>(CollectionName)
+                .Find(x => x.Key == BlogInfoKey)
                 .FirstOrDefaultAsync();
 
             return blogInfo?.Value as BlogInfo ?? new BlogInfo();
@@ -37,12 +40,12 @@ namespace NotaBlog.Persistence
 
             var setting = new Setting
             {
-                Key = "blogInfo",
+                Key = BlogInfoKey,
                 Value = blogInfo
             };
 
-            var collection = _database.GetCollection<Setting>("Settings");
-            await collection.ReplaceOneAsync(x => x.Key == "blogInfo", setting);
+            var collection = _database.GetCollection<Setting>(CollectionName);
+            await collection.ReplaceOneAsync(x => x.Key == BlogInfoKey, setting);
         }
 
         public class Setting

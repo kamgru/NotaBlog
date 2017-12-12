@@ -14,7 +14,7 @@ namespace NotaBlog.Persistence.Tests
     {
         private const string ConnectionString = "mongodb://localhost:27017";
         private const string Database = "NotaBlog_TEST";
-        private const string Collection = "Settings";
+        private const string Collection = SettingsRepository.CollectionName;
 
         [Fact]
         public void WhenBlogSettingsDoesNotExist_ItShouldReturnEmptyBlogInfo()
@@ -45,7 +45,7 @@ namespace NotaBlog.Persistence.Tests
             var collection = database.GetCollection<SettingsRepository.Setting>(Collection);
             collection.InsertOne(new SettingsRepository.Setting
             {
-                Key = "blogInfo",
+                Key = SettingsRepository.BlogInfoKey,
                 Value = blogInfo
             });
 
@@ -66,8 +66,8 @@ namespace NotaBlog.Persistence.Tests
         {
             var database = GetDatabase();
             database.DropCollection(Collection);
-            var collection = database.GetCollection<SettingsRepository.Setting>("Settings");
-            collection.InsertOne(new SettingsRepository.Setting { Key = "blogInfo", Value = new BlogInfo() });
+            var collection = database.GetCollection<SettingsRepository.Setting>(Collection);
+            collection.InsertOne(new SettingsRepository.Setting { Key = SettingsRepository.BlogInfoKey, Value = new BlogInfo() });
 
             new SettingsRepository(database)
                 .UpdateBlogInfo(new BlogInfo
@@ -77,7 +77,8 @@ namespace NotaBlog.Persistence.Tests
                 })
                 .Wait();
 
-            var result = collection.Find(x => x.Key == "blogInfo").SingleOrDefault()?.Value as BlogInfo;
+            var result = collection.Find(x => x.Key == SettingsRepository.BlogInfoKey)
+                .SingleOrDefault()?.Value as BlogInfo;
 
             result.Should().NotBeNull();
             result.Title.Should().BeEquivalentTo("updated blog title");
