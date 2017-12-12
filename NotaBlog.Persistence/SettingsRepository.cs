@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using NotaBlog.Core.Entities;
@@ -24,6 +25,11 @@ namespace NotaBlog.Persistence
 
         public async Task<BlogInfo> GetBlogInfo()
         {
+            if (!BsonClassMap.IsClassMapRegistered(typeof(BlogInfo)))
+            {
+                BsonClassMap.RegisterClassMap<BlogInfo>();
+            }
+
             var blogInfo = await _database.GetCollection<Setting>(CollectionName)
                 .Find(x => x.Key == BlogInfoKey)
                 .FirstOrDefaultAsync();
