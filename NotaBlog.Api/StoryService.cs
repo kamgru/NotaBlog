@@ -37,16 +37,7 @@ namespace NotaBlog.Api
 
         public async Task<IEnumerable<StoryViewModel>> GetLatestStories(int count)
         {
-            var filter = new StoryFilter
-            {
-                Page = 1,
-                Count = count,
-                Predicate = story => story.PublicationStatus == PublicationStatus.Published,
-                SortBy = story => story.Published,
-                DescendingOrder = true
-            };
-
-            var stories = await _storyRepository.Get(filter);
+            var stories = await _storyRepository.Get(StoryFilter.LastestStories(count));
 
             return stories.Items.Select(item => new StoryViewModel
             {
@@ -61,7 +52,16 @@ namespace NotaBlog.Api
 
         public async Task<IEnumerable<StoryLeadViewModel>> GetLatestLeads(int count)
         {
-            return new List<StoryLeadViewModel>();
+            var stories = await _storyRepository.Get(StoryFilter.LastestStories(count));
+
+            return stories.Items.Select(item => new StoryLeadViewModel
+            {
+                Id = item.Id,
+                Title = item.Title,
+                Published = item.Published.Value,
+                LeadContent = item.GetLeadParagraph(),
+                SeName = item.SeName
+            });
         }
     }
 }
