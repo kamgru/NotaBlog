@@ -29,7 +29,10 @@ namespace NotaBlog.Website
         {
             services.AddTransient<IStoryRepository>(
                 factory => new StoryRepository(new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog")));
+            services.AddTransient<ISettingsRepository>(
+                factory => new SettingsRepository(new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog")));
             services.AddTransient<StoryService>();
+            services.AddTransient<ConfigurationService>();
             services.AddMvc();
         }
 

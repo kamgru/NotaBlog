@@ -13,14 +13,19 @@ namespace NotaBlog.Website.Controllers
     public class HomeController : Controller
     {
         private readonly StoryService _storyService;
+        private readonly ConfigurationService _configurationService;
 
-        public HomeController(StoryService storyService)
+        public HomeController(StoryService storyService, ConfigurationService configurationService)
         {
             _storyService = storyService;
+            _configurationService = configurationService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var blogInfo = await _configurationService.GetBlogInfo();
+            ViewBag.BlogInfo = blogInfo;
+
             var stories = await _storyService.GetLatestLeads(5);
             return View(stories);
         }
