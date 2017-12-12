@@ -18,7 +18,7 @@ namespace NotaBlog.Website.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var stories = await _storyService.GetLatestStories(5);
+            var stories = await _storyService.GetLatestLeads(5);
             return View(stories);
         }
     }
