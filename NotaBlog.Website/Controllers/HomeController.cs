@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NotaBlog.Api;
 using NotaBlog.Website.Models;
+using NotaBlog.Api.Services;
 
 namespace NotaBlog.Website.Controllers
 {

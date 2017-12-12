@@ -11,6 +11,7 @@ using NotaBlog.Api;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Repositories;
 using NotaBlog.Persistence;
+using NotaBlog.Api.Services;
 
 namespace NotaBlog.Website
 {

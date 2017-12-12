@@ -1,8 +1,9 @@
-﻿using NotaBlog.Core.Commands;
+﻿using NotaBlog.Api.Dto;
+using NotaBlog.Core.Commands;
 using System;
 using System.Threading.Tasks;
 
-namespace NotaBlog.Api
+namespace NotaBlog.Api.Services
 {
     public class StoryAdminService
     {

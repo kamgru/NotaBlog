@@ -4,10 +4,9 @@ using System.Text;
 
 namespace NotaBlog.Core.Commands
 {
-    public class UpdateStory : IEntityCommand
+    public class UpdateBlogInfo : ICommand
     {
-        public Guid EntityId { get; set; }
         public string Title { get; set; }
-        public string Content { get; set; }
+        public string Description { get; set; }
     }
 }

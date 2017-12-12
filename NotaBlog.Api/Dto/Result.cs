@@ -1,4 +1,4 @@
-﻿namespace NotaBlog.Api
+﻿namespace NotaBlog.Api.Dto
 {
     public class Result
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NotaBlog.Api
+namespace NotaBlog.Api.Dto
 {
-    public class CreateStoryResult : Result
+    public class PublishStoryResult : Result
     {
         public Guid StoryId { get; set; }
     }
