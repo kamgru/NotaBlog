@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,12 +14,8 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void GivenValidCommand_WhenPublishingStory_ItShouldSetPublicationStatusToPublished()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "title",
-                Content = "content"
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -36,12 +32,8 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void GivenValidCommand_WhenStoryPublished_ItShouldBeUpdatedInRepository()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "title",
-                Content = "content"
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -58,17 +50,11 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void GivenValidCommand_WhenStoryPublished_ItShouldSetPublishedDate()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "title",
-                Content = "content",
-                Published = null,
-                PublicationStatus = PublicationStatus.Draft
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };
-            var dateTimeProvider = new DateTimeProvider
+            var dateTimeProvider = new MockDateTimeProvider
             {
                 DateTimeNow = DateTime.Parse("2016-12-16 12:45")
             };

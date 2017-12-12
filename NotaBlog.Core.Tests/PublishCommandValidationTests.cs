@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Tests.Mocks;
+using NotaBlog.Core.Services;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,12 +28,8 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryTitleIsEmpty_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = string.Empty,
-                Content = "content"
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("", "content", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {
@@ -52,12 +49,8 @@ namespace NotaBlog.Core.Tests
         [Fact]
         public void WhenStoryContentIsEmpty_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "my title",
-                Content = string.Empty
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "", _dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {
@@ -74,18 +67,12 @@ namespace NotaBlog.Core.Tests
             result.Success.Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData(PublicationStatus.Published)]
-        [InlineData(PublicationStatus.Withdrawn)]
-        public void WhenStoryStatusIsNotDraft_ItShouldFail(PublicationStatus status)
+        [Fact]
+        public void WhenStoryHasPublicationStatusSetToPublished_ItShouldFail()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Title = "my title",
-                Content = "content",
-                PublicationStatus = status
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
+            story.Publish(_dateTimeProvider);
 
             var repository = new InMemoryStoryRepository
             {

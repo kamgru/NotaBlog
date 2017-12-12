@@ -1,8 +1,9 @@
 using FluentAssertions;
 using MongoDB.Driver;
 using NotaBlog.Core.Entities;
-using NotaBlog.Core.Factories;
 using NotaBlog.Core.Repositories;
+using NotaBlog.Core.Services;
+using NotaBlog.Tests.Common.Mocks;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -17,17 +18,14 @@ namespace NotaBlog.Persistence.Tests
         private const string Database = "NotaBlog_TEST";
         private const string Collection = "Stories";
 
+        private readonly IDateTimeProvider _dateTimeProvider = new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow };
+
         [Fact]
         public void TestAddStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -40,21 +38,20 @@ namespace NotaBlog.Persistence.Tests
             var collection = database.GetCollection<Story>(Collection);
             collection.Count("{}").Should().Be(1);
             var result = collection.Find(x => x.Id == story.Id).FirstOrDefault();
-            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(
+                story, e => e.Excluding(s => s.Created)
+                .Excluding(s => s.Published)
+                .Excluding(s => s.Updated));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
         }
 
         [Fact]
         public void TestGetStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
@@ -65,36 +62,39 @@ namespace NotaBlog.Persistence.Tests
                 .Get(story.Id)
                 .Result;
 
-            result.Should().BeEquivalentTo(story, e => e.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(
+                story, e => e.Excluding(p => p.Created)
+                    .Excluding(p => p.Published)
+                    .Excluding(p => p.Updated));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
         }
 
         [Fact]
         public void TestUpdateStory()
         {
-            var story = new Story
-            {
-                Id = Guid.NewGuid(),
-                Content = "content",
-                Title = "title",
-                Created = DateTime.UtcNow,
-                PublicationStatus = PublicationStatus.Published
-            };
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
+            story.Publish(_dateTimeProvider);
 
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
             database.DropCollection(Collection);
             database.GetCollection<Story>(Collection).InsertOne(story);
 
-            story.Content = "updated content";
-            story.Title = "updated title";
+            story.Update("updated title", "updated content", _dateTimeProvider);
 
             var repository = new StoryRepository(database);
             repository.Update(story).Wait();
 
             var result = repository.Get(story.Id).Result;
-            result.Should().BeEquivalentTo(story, x => x.Excluding(p => p.Created));
+            result.Should().BeEquivalentTo(
+                story, e => e.Excluding(p => p.Created)
+                    .Excluding(p => p.Published)
+                    .Excluding(p => p.Updated));
             result.Created.Should().BeCloseTo(story.Created);
+            result.Published.Should().BeCloseTo(story.Published.Value);
+            result.Updated.Should().BeCloseTo(story.Updated.Value);
         }
 
         [Fact]
@@ -103,9 +103,18 @@ namespace NotaBlog.Persistence.Tests
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
             database.DropCollection(Collection);
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
+
+            var story1 = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story1.Update("title", "content", _dateTimeProvider);
+            database.GetCollection<Story>(Collection).InsertOne(story1);
+
+            var story2 = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story2.Update("title", "content", _dateTimeProvider);
+            database.GetCollection<Story>(Collection).InsertOne(story2);
+
+            var story3 = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story3.Update("different title", "content", _dateTimeProvider);
+            database.GetCollection<Story>(Collection).InsertOne(story3);
 
             var repository = new StoryRepository(database);
 
@@ -138,12 +147,11 @@ namespace NotaBlog.Persistence.Tests
             var database = new MongoClient(ConnectionString)
                 .GetDatabase(Database);
             database.DropCollection(Collection);
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
-            database.GetCollection<Story>(Collection).InsertOne(new Story { Title = "other title" });
-
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
 
             var repository = new StoryRepository(database);
 

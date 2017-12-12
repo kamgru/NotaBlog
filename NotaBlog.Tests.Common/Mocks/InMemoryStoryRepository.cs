@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 
-namespace NotaBlog.Core.Tests.Mocks
+namespace NotaBlog.Tests.Common.Mocks
 {
-    class InMemoryStoryRepository : IStoryRepository
+    public class InMemoryStoryRepository : IStoryRepository
     {
         public List<Story> Stories { get; set; } = new List<Story>();
         public bool UpdateWasCalled { get; private set; }
@@ -27,7 +27,7 @@ namespace NotaBlog.Core.Tests.Mocks
 
         public Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Stories.Where(predicate.Compile()));
         }
 
         public Task<PaginatedResult<Story>> Get(StoryFilter filter)

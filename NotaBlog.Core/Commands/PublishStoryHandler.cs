@@ -28,8 +28,7 @@ namespace NotaBlog.Core.Commands
                 return new CommandValidationResult(errors.ToArray());
             }
 
-            story.PublicationStatus = PublicationStatus.Published;
-            story.Published = _dateTimeProvider.Now();
+            story.Publish(_dateTimeProvider);
 
             await _storyRepository.Update(story);
 

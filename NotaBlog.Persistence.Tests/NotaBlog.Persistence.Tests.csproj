@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NotaBlog.Core\NotaBlog.Core.csproj" />
     <ProjectReference Include="..\NotaBlog.Persistence\NotaBlog.Persistence.csproj" />
+    <ProjectReference Include="..\NotaBlog.Tests.Common\NotaBlog.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>
