@@ -32,7 +32,13 @@ namespace NotaBlog.Tests.Common.Mocks
 
         public Task<PaginatedResult<Story>> Get(StoryFilter filter)
         {
-            throw new NotImplementedException();
+            var result = new PaginatedResult<Story>
+            {
+                Items = Stories,
+                TotalCount = Stories.Count
+            };
+
+            return Task.FromResult(result);
         }
 
         public Task Update(Story story)

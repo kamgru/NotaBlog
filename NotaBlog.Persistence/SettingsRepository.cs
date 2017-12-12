@@ -28,9 +28,21 @@ namespace NotaBlog.Persistence
             return blogInfo?.Value as BlogInfo ?? new BlogInfo();
         }
 
-        public Task UpdateBlogInfo(BlogInfo blogInformation)
+        public async Task UpdateBlogInfo(BlogInfo blogInfo)
         {
-            throw new NotImplementedException();
+            if (blogInfo == null)
+            {
+                throw new ArgumentNullException(nameof(blogInfo));
+            }
+
+            var setting = new Setting
+            {
+                Key = "blogInfo",
+                Value = blogInfo
+            };
+
+            var collection = _database.GetCollection<Setting>("Settings");
+            await collection.ReplaceOneAsync(x => x.Key == "blogInfo", setting);
         }
 
         public class Setting

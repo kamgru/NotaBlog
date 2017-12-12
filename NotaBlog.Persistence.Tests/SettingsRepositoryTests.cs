@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NotaBlog.Persistence.Tests
@@ -18,8 +19,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void WhenBlogSettingsDoesNotExist_ItShouldReturnEmptyBlogInfo()
         {
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = GetDatabase();
             database.DropCollection(Collection);
 
             var result = new SettingsRepository(database)
@@ -39,8 +39,7 @@ namespace NotaBlog.Persistence.Tests
                 Description = "blog description"
             };
 
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = GetDatabase();
             database.DropCollection(Collection);
 
             var collection = database.GetCollection<SettingsRepository.Setting>(Collection);
@@ -55,5 +54,40 @@ namespace NotaBlog.Persistence.Tests
             result.Should().BeEquivalentTo(blogInfo);
         }
         
+        [Fact]
+        public void GivenNullBlogInfo_WhenUpdating_ItShouldThrowException()
+        {
+            Func<Task> test = async () => await new SettingsRepository(GetDatabase()).UpdateBlogInfo(null);
+            test.Should().Throw<ArgumentNullException>(); 
+        }
+
+        [Fact]
+        public void ItShouldUpdateBlogInfo()
+        {
+            var database = GetDatabase();
+            database.DropCollection(Collection);
+            var collection = database.GetCollection<SettingsRepository.Setting>("Settings");
+            collection.InsertOne(new SettingsRepository.Setting { Key = "blogInfo", Value = new BlogInfo() });
+
+            new SettingsRepository(database)
+                .UpdateBlogInfo(new BlogInfo
+                {
+                    Title = "updated blog title",
+                    Description = "updated blog description"
+                })
+                .Wait();
+
+            var result = collection.Find(x => x.Key == "blogInfo").SingleOrDefault()?.Value as BlogInfo;
+
+            result.Should().NotBeNull();
+            result.Title.Should().BeEquivalentTo("updated blog title");
+            result.Description.Should().BeEquivalentTo("updated blog description");
+        }
+
+        private IMongoDatabase GetDatabase()
+        {
+            return new MongoClient(ConnectionString)
+                .GetDatabase(Database);
+        }
     }
 }
