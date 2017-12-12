@@ -1,7 +1,7 @@
 ﻿using NotaBlog.Core.Entities;
 using System;
 
-namespace NotaBlog.Api
+namespace NotaBlog.Api.ViewModels
 {
     public class StoryViewModel
     {

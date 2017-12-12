@@ -1,12 +1,11 @@
-﻿using NotaBlog.Core.Entities;
+﻿using NotaBlog.Api.ViewModels;
 using NotaBlog.Core.Repositories;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NotaBlog.Api
+namespace NotaBlog.Api.Services
 {
     public class StoryService
     {

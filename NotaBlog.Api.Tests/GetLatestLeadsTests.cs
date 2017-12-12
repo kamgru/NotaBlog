@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Collections;
+using NotaBlog.Api.Services;
 
 namespace NotaBlog.Api.Tests
 {
