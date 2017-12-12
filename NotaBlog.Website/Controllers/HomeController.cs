@@ -4,34 +4,24 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using NotaBlog.Api;
 using NotaBlog.Website.Models;
 
 namespace NotaBlog.Website.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly StoryService _storyService;
+
+        public HomeController(StoryService storyService)
         {
-            return View();
+            _storyService = storyService;
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> Index()
         {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var stories = await _storyService.GetLatestLeads(5);
+            return View(stories);
         }
     }
 }

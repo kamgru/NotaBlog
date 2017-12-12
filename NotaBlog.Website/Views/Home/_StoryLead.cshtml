@@ -1,0 +1,17 @@
+﻿@model NotaBlog.Api.StoryLeadViewModel
+
+<div class="mt-4">
+    <h2>
+        @Model.Title
+    </h2>
+    <small class="text-muted">@Model.Published.ToString("dd/MM/yyyy")</small>
+    <div class="mt-2">
+        @Html.Raw(Model.LeadContent)
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <a href="#" class="float-right"><small><i class="fa fa-angle-double-right" aria-hidden="true"></i> read more</small></a>
+        </div>
+    </div>
+</div>
+<hr />

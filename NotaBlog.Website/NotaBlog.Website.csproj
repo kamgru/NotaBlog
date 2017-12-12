@@ -20,4 +20,8 @@
     <ProjectReference Include="..\NotaBlog.Persistence\NotaBlog.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
 </Project>
