@@ -41,6 +41,11 @@ namespace NotaBlog.Tests.Common.Mocks
             return Task.FromResult(result);
         }
 
+        public Task<Story> GetBySeName(string seName)
+        {
+            return Task.FromResult(Stories.FirstOrDefault(x => x.SeName == seName));
+        }
+
         public Task Update(Story story)
         {
             var oldStory = Stories.FirstOrDefault(item => item.Id == story.Id);

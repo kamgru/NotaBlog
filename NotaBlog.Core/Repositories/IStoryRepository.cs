@@ -14,5 +14,6 @@ namespace NotaBlog.Core.Repositories
         Task Update(Story story);
         Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate);
         Task<PaginatedResult<Story>> Get(StoryFilter filter);
+        Task<Story> GetBySeName(string seName);
     }
 }

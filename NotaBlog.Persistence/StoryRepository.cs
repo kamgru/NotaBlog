@@ -68,6 +68,11 @@ namespace NotaBlog.Persistence
             };
         }
 
+        public Task<Story> GetBySeName(string seName)
+        {
+            return GetCollection().Find(x => x.SeName == seName).FirstOrDefaultAsync();
+        }
+
         public async Task Update(Story story)
         {
             await GetCollection().ReplaceOneAsync(x => x.Id == story.Id, story);
