@@ -170,19 +170,17 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestGetBySeName()
         {
-            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
-            story.SetSeName("test-story-title");
-
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = new MongoClient(ConnectionString).GetDatabase(Database);
             database.DropCollection(Collection);
+
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.SetSeName("test-story");
+
             database.GetCollection<Story>(Collection).InsertOne(story);
 
-            var repository = new StoryRepository(database);
+            var result = new StoryRepository(database).Get("test-story").Result;
 
-            var result = repository.GetBySeName("test-story-title").Result;
-
-            result.Should().BeEquivalentTo(story, x => x.Excluding(s => s.Created));
+            result.Should().BeEquivalentTo(story, x => x.Excluding(e => e.Created));
             result.Created.Should().BeCloseTo(story.Created);
         }
     }

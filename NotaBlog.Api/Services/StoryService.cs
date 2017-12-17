@@ -1,4 +1,5 @@
 ﻿using NotaBlog.Api.ViewModels;
+using NotaBlog.Core.Entities;
 using NotaBlog.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -29,8 +30,23 @@ namespace NotaBlog.Api.Services
                 Id = story.Id,
                 Title = story.Title,
                 Content = story.Content,
-                PublicationStatus = story.PublicationStatus,
-                Created = story.Created
+            };
+        }
+
+        public async Task<StoryViewModel> GetPublishedStory(string seName)
+        {
+            var story = await _storyRepository.Get(seName);
+            if (story == null || story.PublicationStatus != PublicationStatus.Published)
+            {
+                return null;
+            }
+
+            return new StoryViewModel
+            {
+                Id = story.Id,
+                Published = story.Published.Value,
+                Title = story.Title,
+                Content = story.Content
             };
         }
 
@@ -44,8 +60,6 @@ namespace NotaBlog.Api.Services
                 Title = item.Title,
                 Content = item.Content,
                 Published = item.Published.Value,
-                Created = item.Created,
-                PublicationStatus = item.PublicationStatus
             });
         }
 

@@ -88,5 +88,22 @@ namespace NotaBlog.Core.Tests
 
             result.Success.Should().BeFalse();
         }
+
+        [Fact]
+        public void WhenStorySeNameEmpty_ItShouldFail()
+        {
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.Update("title", "content", _dateTimeProvider);
+
+            var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
+
+            Handler(repository)
+                .Handle(new PublishStory
+                {
+                    EntityId = story.Id
+                })
+                .Result.Success
+                .Should().BeFalse();
+        }
     }
 }
