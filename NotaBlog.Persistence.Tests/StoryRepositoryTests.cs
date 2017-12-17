@@ -166,5 +166,22 @@ namespace NotaBlog.Persistence.Tests
             result.TotalCount.Should().Be(5);
             result.Items.Should().HaveCount(2);
         }
+
+        [Fact]
+        public void TestGetBySeName()
+        {
+            var database = new MongoClient(ConnectionString).GetDatabase(Database);
+            database.DropCollection(Collection);
+
+            var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
+            story.SetSeName("test-story");
+
+            database.GetCollection<Story>(Collection).InsertOne(story);
+
+            var result = new StoryRepository(database).Get("test-story").Result;
+
+            result.Should().BeEquivalentTo(story, x => x.Excluding(e => e.Created));
+            result.Created.Should().BeCloseTo(story.Created);
+        }
     }
 }

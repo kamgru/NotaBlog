@@ -60,6 +60,11 @@ namespace NotaBlog.Core.Commands
                 errors = errors.Concat(new[] { "You can only publish draft stories" });
             }
 
+            if (string.IsNullOrEmpty(story.SeName))
+            {
+                errors = errors.Concat(new[] { "Story search engine name must be set" });
+            }
+
             return !errors.Any();
         }
     }

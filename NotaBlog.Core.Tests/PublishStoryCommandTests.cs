@@ -16,6 +16,7 @@ namespace NotaBlog.Core.Tests
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Update("title", "content", _dateTimeProvider);
+            story.SetSeName("test");
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -34,6 +35,7 @@ namespace NotaBlog.Core.Tests
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Update("title", "content", _dateTimeProvider);
+            story.SetSeName("test");
 
             var repository = new InMemoryStoryRepository { Stories = new List<Story> { story } };
 
@@ -52,6 +54,7 @@ namespace NotaBlog.Core.Tests
         {
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             story.Update("title", "content", _dateTimeProvider);
+            story.SetSeName("test");
 
             var repository = new InMemoryStoryRepository{ Stories = new List<Story> { story } };
             var dateTimeProvider = new MockDateTimeProvider

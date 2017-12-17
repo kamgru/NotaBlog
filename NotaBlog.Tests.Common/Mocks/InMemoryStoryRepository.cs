@@ -32,13 +32,25 @@ namespace NotaBlog.Tests.Common.Mocks
 
         public Task<PaginatedResult<Story>> Get(StoryFilter filter)
         {
+            var predicate = filter.Predicate.Compile();
+            var sortBy = filter.SortBy.Compile();
+
+            var stories = filter.DescendingOrder
+                ? Stories.Where(predicate).OrderByDescending(sortBy)
+                : Stories.Where(predicate).OrderBy(sortBy);
+
             var result = new PaginatedResult<Story>
             {
-                Items = Stories,
+                Items = stories.Skip((filter.Page - 1) * filter.Count).Take(filter.Count),
                 TotalCount = Stories.Count
             };
 
             return Task.FromResult(result);
+        }
+
+        public Task<Story> Get(string seName)
+        {
+            return Task.FromResult(Stories.FirstOrDefault(x => x.SeName == seName));
         }
 
         public Task Update(Story story)

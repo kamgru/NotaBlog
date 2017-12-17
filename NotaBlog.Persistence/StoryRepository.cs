@@ -27,6 +27,11 @@ namespace NotaBlog.Persistence
             return GetCollection().Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
+        public Task<Story> Get(string seName)
+        {
+            return GetCollection().Find(x => x.SeName == seName).SingleOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Story>> Get(Expression<Func<Story, bool>> predicate)
         {
             return await GetCollection()
