@@ -1,16 +1,16 @@
 ﻿@model NotaBlog.Api.ViewModels.StoryLeadViewModel
 
 <div class="mt-4">
-    <h2>
-        @Model.Title
-    </h2>
+    <h3>
+        <a href="@Url.Action("Story", "Home", new { title = Model.SeName })">@Model.Title</a>
+    </h3>
     <small class="text-muted">@Model.Published.ToString("dd/MM/yyyy")</small>
     <div class="mt-2">
         @Html.Raw(Model.LeadContent)
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <a href="#" class="float-right"><small><i class="fa fa-angle-double-right" aria-hidden="true"></i> read more</small></a>
+            <a href="@Url.Action("Story", "Home", new { title = Model.SeName })" class="float-right"><small><i class="fa fa-angle-double-right" aria-hidden="true"></i> read more</small></a>
         </div>
     </div>
 </div>

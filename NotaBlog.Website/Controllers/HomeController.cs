@@ -29,5 +29,13 @@ namespace NotaBlog.Website.Controllers
             var stories = await _storyService.GetLatestLeads(5);
             return View(stories);
         }
+
+        public async Task<IActionResult> Story(string title)
+        {
+            var story = await _storyService.GetPublishedStory(title);
+            return story != null
+                ? View(story)
+                : (IActionResult)RedirectToAction("PageNotFound", "Error");
+        }
     }
 }
