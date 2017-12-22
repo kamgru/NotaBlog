@@ -46,13 +46,9 @@ namespace NotaBlog.Persistence
                 throw new ArgumentNullException(nameof(filter));
             }
 
-            if (filter.Predicate == null)
-            {
-                return new PaginatedResult<Story>();
-            }
-
-            var stories = GetCollection()
-                .Find(filter.Predicate);
+            var stories = filter.Predicate == null 
+                ? GetCollection().Find(_ => true)
+                : GetCollection().Find(filter.Predicate);
 
             if (filter.SortBy != null)
             {
