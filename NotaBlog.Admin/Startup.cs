@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using NotaBlog.Api.Services;
+using NotaBlog.Core.Commands;
+using NotaBlog.Core.Repositories;
+using NotaBlog.Core.Services;
+using NotaBlog.Persistence;
 
 namespace NotaBlog.Admin
 {
@@ -22,6 +28,19 @@ namespace NotaBlog.Admin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var storyRepository = new StoryRepository(new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog"));
+
+            services.AddTransient<IStoryRepository>(x => storyRepository);
+            services.AddTransient<ISettingsRepository>(
+                factory => new SettingsRepository(new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog")));
+            services.AddTransient<StoryAdminService>();
+
+            var commandDispatcher = new CommandDispatcher();
+            commandDispatcher.RegisterHandler(new CreateStoryHandler(storyRepository, new DateTimeProvider()));
+            commandDispatcher.RegisterHandler(new PublishStoryHandler(storyRepository, new DateTimeProvider()));
+            services.AddTransient<ICommandDispatcher>(x => commandDispatcher);
+
+            services.AddTransient<ConfigurationService>();
             services.AddMvc();
         }
 
