@@ -131,14 +131,22 @@ namespace NotaBlog.Persistence.Tests
         }
 
         [Fact]
-        public void WhenPredicateNull_ItShouldReturnEmptyResult()
+        public void WhenPredicateNull_ItShouldReturnAllEntities()
         {
-            var repository = new StoryRepository(new MongoClient(ConnectionString).GetDatabase(Database));
+            var database = new MongoClient(ConnectionString)
+                .GetDatabase(Database);
+            database.DropCollection(Collection);
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+            database.GetCollection<Story>(Collection).InsertOne(new Story());
+
+            var repository = new StoryRepository(database);
 
             var result = repository.Get(new StoryFilter()).Result;
 
-            result.TotalCount.Should().Be(0);
-            result.Items.Should().BeEmpty();
+            result.TotalCount.Should().Be(5);
         }
 
         [Fact]
