@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Core", "NotaBlog.Core\NotaBlog.Core.csproj", "{0164BD34-0A3A-4683-BEEF-FD3734795DE0}"
 EndProject
@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Persistence.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Api", "NotaBlog.Api\NotaBlog.Api.csproj", "{761E0FC1-F3EF-47BE-B642-042FAF95F1F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Api.Tests", "NotaBlog.Api.Tests\NotaBlog.Api.Tests.csproj", "{BC240A7A-CE0D-4E03-8664-EDFA1C8C6B99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Api.Tests", "NotaBlog.Api.Tests\NotaBlog.Api.Tests.csproj", "{BC240A7A-CE0D-4E03-8664-EDFA1C8C6B99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Tests.Common", "NotaBlog.Tests.Common\NotaBlog.Tests.Common.csproj", "{8909840D-C341-469A-AA39-8399DAF62C37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotaBlog.Tests.Common", "NotaBlog.Tests.Common\NotaBlog.Tests.Common.csproj", "{8909840D-C341-469A-AA39-8399DAF62C37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotaBlog.Admin", "NotaBlog.Admin\NotaBlog.Admin.csproj", "{B5C4EEB3-67A5-435B-A741-997287B525CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{8909840D-C341-469A-AA39-8399DAF62C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8909840D-C341-469A-AA39-8399DAF62C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8909840D-C341-469A-AA39-8399DAF62C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5C4EEB3-67A5-435B-A741-997287B525CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5C4EEB3-67A5-435B-A741-997287B525CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5C4EEB3-67A5-435B-A741-997287B525CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5C4EEB3-67A5-435B-A741-997287B525CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
