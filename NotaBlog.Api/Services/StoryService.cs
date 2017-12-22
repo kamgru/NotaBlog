@@ -17,7 +17,7 @@ namespace NotaBlog.Api.Services
             _storyRepository = storyRepository;
         }
 
-        public async Task<StoryViewModel> GetStory(Guid id)
+        public async Task<BlogStoryViewModel> GetStory(Guid id)
         {
             var story = await _storyRepository.Get(id);
             if (story == null)
@@ -25,7 +25,7 @@ namespace NotaBlog.Api.Services
                 return null;
             }
 
-            return new StoryViewModel
+            return new BlogStoryViewModel
             {
                 Id = story.Id,
                 Title = story.Title,
@@ -33,7 +33,7 @@ namespace NotaBlog.Api.Services
             };
         }
 
-        public async Task<StoryViewModel> GetPublishedStory(string seName)
+        public async Task<BlogStoryViewModel> GetPublishedStory(string seName)
         {
             var story = await _storyRepository.Get(seName);
             if (story == null || story.PublicationStatus != PublicationStatus.Published)
@@ -41,7 +41,7 @@ namespace NotaBlog.Api.Services
                 return null;
             }
 
-            return new StoryViewModel
+            return new BlogStoryViewModel
             {
                 Id = story.Id,
                 Published = story.Published.Value,
@@ -50,11 +50,11 @@ namespace NotaBlog.Api.Services
             };
         }
 
-        public async Task<IEnumerable<StoryViewModel>> GetLatestStories(int count)
+        public async Task<IEnumerable<BlogStoryViewModel>> GetLatestStories(int count)
         {
             var stories = await _storyRepository.Get(StoryFilter.LastestStories(count));
 
-            return stories.Items.Select(item => new StoryViewModel
+            return stories.Items.Select(item => new BlogStoryViewModel
             {
                 Id = item.Id,
                 Title = item.Title,
