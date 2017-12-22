@@ -5,10 +5,12 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar.component';
 
 @NgModule({
     declarations: [
-        AppComponent,
+        AppComponent, 
+        NavbarComponent
     ],
     imports: [
         CommonModule,
