@@ -21,13 +21,25 @@ namespace NotaBlog.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetStoryHeaders(int page, int count)
         {
-            throw new NotImplementedException();
+            return Ok(await _storyAdminService.GetStoryHeaders(page, count));
         }
 
+        [Route("{id}")]
         [HttpGet]
         public async Task<IActionResult> GetStory(string id)
         {
-            throw new NotImplementedException();
+            if (Guid.TryParse(id, out var guid))
+            {
+                var story = await _storyAdminService.GetStory(guid);
+                if (story == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(story);
+            }
+
+            return BadRequest();
         }
     }
 }
