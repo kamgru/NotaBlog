@@ -22,6 +22,6 @@ export class StoriesService {
     }
 
     public getStory(id:string): Observable<IStory> {
-        return this.http.get<IStory>(`/api/stories/${id}`)
+        return this.http.get<IStory>(`/api/stories/${id}`);
     }
 }

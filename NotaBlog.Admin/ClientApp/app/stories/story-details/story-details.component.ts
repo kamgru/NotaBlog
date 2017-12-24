@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IStory } from './models/IStory';
-import { StoriesService } from './stories.service';
+import { IStory } from '../models/IStory';
+import { StoriesService } from '../stories.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
