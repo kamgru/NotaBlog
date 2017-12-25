@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IStoryHeader } from './models/IStoryHeader';
-import { IPaginatedData } from  '../shared/models/IPaginatedData';
+import { IPaginatedData } from  '../models/IPaginatedData';
 import { Observable } from 'rxjs/Observable';
 import { IStory } from './models/IStory';
 import { HttpClient, HttpParams } from '@angular/common/http';

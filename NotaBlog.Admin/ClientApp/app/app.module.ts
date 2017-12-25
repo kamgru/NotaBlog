@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoriesModule } from './stories/stories.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './shared/home.component';
-import { NavbarComponent } from './navbar.component';
+import { HomeComponent } from './components/home.component';
+import { NavbarComponent } from './components/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
