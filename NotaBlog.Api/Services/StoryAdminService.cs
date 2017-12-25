@@ -104,5 +104,21 @@ namespace NotaBlog.Api.Services
                 Updated = story.Updated
             };
         }
+
+        public async Task<Result> UpdateStory(UpdateStoryRequest request)
+        {
+            var validationResult = await _commandDispatcher.Submit(new UpdateStory
+            {
+                EntityId = request.StoryId,
+                Title = request.Title,
+                Content = request.Content
+            });
+
+            return new Result
+            {
+                Success = validationResult.Success,
+                Errors = validationResult.Errors
+            };
+        }
     }
 }
