@@ -41,5 +41,23 @@ namespace NotaBlog.Admin.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateStory()
+        {
+            var result = await _storyAdminService.CreateStory();
+            if (result.Success)
+            {
+                return Ok(result.StoryId);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateStory(string title, string content)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

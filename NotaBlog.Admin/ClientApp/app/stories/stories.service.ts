@@ -20,8 +20,4 @@ export class StoriesService {
 
         return this.http.get<IPaginatedData<IStoryHeader>>('/api/stories', {params});
     }
-
-    public getStory(id:string): Observable<IStory> {
-        return this.http.get<IStory>(`/api/stories/${id}`);
-    }
 }
