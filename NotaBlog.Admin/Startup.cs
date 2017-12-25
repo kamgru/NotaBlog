@@ -38,6 +38,7 @@ namespace NotaBlog.Admin
             var commandDispatcher = new CommandDispatcher();
             commandDispatcher.RegisterHandler(new CreateStoryHandler(storyRepository, new DateTimeProvider()));
             commandDispatcher.RegisterHandler(new PublishStoryHandler(storyRepository, new DateTimeProvider()));
+            commandDispatcher.RegisterHandler(new UpdateStoryHandler(storyRepository, new DateTimeProvider()));
             services.AddTransient<ICommandDispatcher>(x => commandDispatcher);
 
             services.AddTransient<ConfigurationService>();

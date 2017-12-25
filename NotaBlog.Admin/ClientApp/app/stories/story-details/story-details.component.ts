@@ -4,6 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { IStory } from '../models/IStory';
 import { StoriesService } from '../stories.service';
+import { catchError, tap } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Component({
     selector: 'story-details',
@@ -12,6 +14,8 @@ import { StoriesService } from '../stories.service';
 export class StoryDetailsComponent implements OnInit {
 
     private story:IStory;
+    private error:string | null;
+    private showSuccess:boolean = false;
 
     public storyForm = new FormGroup({
         title: new FormControl(),
@@ -30,11 +34,27 @@ export class StoryDetailsComponent implements OnInit {
             content: this.story.content 
         });
         this.storyForm.valueChanges.subscribe(x => {
-            console.log(x)
         });
     }
 
     public onSubmit(): void {
-        console.log(this.storyForm.value)
+        this.storiesService.updateStory(this.story.id, this.storyForm.value.title, this.storyForm.value.content)
+            .pipe(
+                tap(this.handleSuccess),
+                catchError(this.handleError),
+            )
+            .subscribe()
+    }
+
+    handleSuccess(): void {
+        this.showSuccess = true;
+        this.error = null;
+        this.storyForm.markAsPristine();
+    }
+
+    handleError(httpError: any): any {
+        this.error = httpError.error;
+        this.showSuccess = false;
+        return ErrorObservable.create('update error');
     }
 }

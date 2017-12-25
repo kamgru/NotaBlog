@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { IStoryHeader } from './models/IStoryHeader';
 import { IPaginatedData } from  '../shared/models/IPaginatedData';
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { IStory } from './models/IStory';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class StoriesService {
@@ -19,5 +17,9 @@ export class StoriesService {
             .set('count', count.toString());
 
         return this.http.get<IPaginatedData<IStoryHeader>>('/api/stories', {params});
+    }
+
+    public updateStory(id:string, title:string, content:string): Observable<any> {
+        return this.http.patch(`/api/stories/${id}`, {title: title, content: content});
     }
 }

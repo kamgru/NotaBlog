@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NotaBlog.Admin.Messages;
+using NotaBlog.Api.Dto;
 using NotaBlog.Api.Services;
 
 namespace NotaBlog.Admin.Controllers
@@ -54,10 +56,25 @@ namespace NotaBlog.Admin.Controllers
             return BadRequest();
         }
 
+        [Route("{id}")]
         [HttpPatch]
-        public async Task<IActionResult> UpdateStory(string title, string content)
+        public async Task<IActionResult> UpdateStory(string id, [FromBody]UpdateStoryRequestBody body)
         {
-            throw new NotImplementedException();
+            if (Guid.TryParse(id, out var guid))
+            {
+                var result = await _storyAdminService.UpdateStory(new UpdateStoryRequest
+                {
+                    StoryId = guid,
+                    Title = body.Title,
+                    Content = body.Content
+                });
+
+                return result.Success
+                    ? (IActionResult)Ok(result)
+                    : BadRequest(string.Join("\n", result.Errors));
+            }
+
+            return BadRequest();
         }
     }
 }

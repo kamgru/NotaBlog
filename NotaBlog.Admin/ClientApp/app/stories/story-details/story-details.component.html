@@ -1,3 +1,18 @@
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
+    <strong>There was an error :(</strong> 
+    <p>{{error}}</p>
+    <button type="button" class="close" data-dismiss="alert">
+        <span>&times;</span>
+    </button>
+</div>
+
+<div class="alert alert-success alert-dismissible fade show" role="alert" [hidden]="!showSuccess">
+    <strong>story updated :)</strong> 
+    <button type="button" class="close" data-dismiss="alert">
+        <span>&times;</span>
+    </button>
+</div>
+
 <form [formGroup]="storyForm" novalidate (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label>title</label>
@@ -10,6 +25,6 @@
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary" *ngIf="storyForm.touched || storyForm.dirty">save</button>
+        <button type="submit" class="btn btn-primary" *ngIf="!storyForm.pristine">save</button>
     </div>
 </form>
