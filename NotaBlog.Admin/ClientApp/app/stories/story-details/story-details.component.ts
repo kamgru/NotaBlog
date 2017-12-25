@@ -40,21 +40,17 @@ export class StoryDetailsComponent implements OnInit {
     public onSubmit(): void {
         this.storiesService.updateStory(this.story.id, this.storyForm.value.title, this.storyForm.value.content)
             .pipe(
-                tap(this.handleSuccess),
-                catchError(this.handleError),
+                tap(_ => {
+                    this.showSuccess = true;
+                    this.error = null;
+                    this.storyForm.markAsPristine();
+                }),
+                catchError(x => {
+                    this.error = x.error;
+                    this.showSuccess = false;
+                    return ErrorObservable.create('update error');
+                }),
             )
             .subscribe()
-    }
-
-    handleSuccess(): void {
-        this.showSuccess = true;
-        this.error = null;
-        this.storyForm.markAsPristine();
-    }
-
-    handleError(httpError: any): any {
-        this.error = httpError.error;
-        this.showSuccess = false;
-        return ErrorObservable.create('update error');
     }
 }

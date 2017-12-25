@@ -3,11 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { StoriesListComponent } from './stories-list/stories-list.component';
 import { StoryDetailsComponent } from './story-details/story-details.component';
 import { StoryResolve } from './story-details/story.resolve';
+import { StoriesComponent } from './stories.component';
 
 const storiesRoutes:Routes = [
-    {path: 'stories', component: StoriesListComponent},
-    {path: 'stories/add-new', component: StoryDetailsComponent, resolve: {story: StoryResolve} },
-    {path: 'stories/:id', component: StoryDetailsComponent, resolve: {story: StoryResolve}}
+    {path: 'stories', component: StoriesComponent, children: [
+        {path: '', component: StoriesListComponent},
+        {path: 'add-new', component: StoryDetailsComponent, resolve: {story: StoryResolve} },
+        {path: ':id', component: StoryDetailsComponent, resolve: {story: StoryResolve}}
+    ]}
 ];
 
 @NgModule({

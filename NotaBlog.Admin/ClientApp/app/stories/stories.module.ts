@@ -1,20 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoriesService } from './stories.service';
-import { StoriesListComponent } from './stories-list/stories-list.component';
 import { StoriesRoutingModule } from './stories-routing.module';
-import { StoryDetailsComponent } from './story-details/story-details.component';
-import { AppModuleShared } from '../app.shared.module';
-import { PublicationStatusPipe } from './publication-status.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { StoriesService } from './stories.service';
 import { StoryResolve } from './story-details/story.resolve';
+
+import { StoriesComponent } from './stories.component';
+import { StoriesListComponent } from './stories-list/stories-list.component';
+import { StoryDetailsComponent } from './story-details/story-details.component';
+import { PublicationStatusPipe } from './publication-status.pipe';
 
 @NgModule({
     imports: [
         CommonModule, 
+        ReactiveFormsModule,
+        HttpClientModule,
         StoriesRoutingModule, 
-        AppModuleShared
     ],
     declarations: [
+        StoriesComponent,
         StoriesListComponent, 
         StoryDetailsComponent, 
         PublicationStatusPipe

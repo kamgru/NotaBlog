@@ -1,15 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppModuleShared } from './app.shared.module';
-import { AppComponent } from './app.component';
 import { StoriesModule } from './stories/stories.module';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './shared/home.component';
+import { NavbarComponent } from './navbar.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
     bootstrap: [ AppComponent ],
     imports: [
         BrowserModule,
         StoriesModule,
-        AppModuleShared
+        AppRoutingModule
+    ],
+    declarations: [
+        NavbarComponent,
+        HomeComponent,
+        AppComponent
     ],
     providers: [
         { provide: 'BASE_URL', useFactory: getBaseUrl }
