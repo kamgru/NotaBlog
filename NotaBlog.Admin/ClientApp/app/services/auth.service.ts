@@ -7,6 +7,9 @@ import { IToken } from '../models/IToken';
 export class AuthService {
 
     private authenticated:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private readonly accessTokenKey:string = "accessToken";
+    private readonly refreshTokenKey:string = "refreshToken";
+    private readonly expiresKey:string = "expires";
 
     get isAuthenticated(): Observable<boolean> {
 
@@ -27,23 +30,33 @@ export class AuthService {
     public getAuthorizationHeader(): string {
         const token = this.getToken();
         if (token){
-            return "Bearer " + token.token;
+            return "Bearer " + token.accessToken;
         }
         return "";
     }
 
     public storeToken(token:IToken): void {
-        localStorage.setItem('token', token.token);
-        localStorage.setItem('expires', token.expires);
+        localStorage.setItem(this.accessTokenKey, token.accessToken);
+        localStorage.setItem(this.refreshTokenKey, token.refreshToken);
+        localStorage.setItem(this.expiresKey, token.expires);
+    }
+
+    public invalidateToken(): void {
+        localStorage.removeItem(this.accessTokenKey);
+        localStorage.removeItem(this.refreshTokenKey);
+        localStorage.removeItem(this.expiresKey);
+        this.authenticated.next(false);
     }
 
     private getToken(): IToken | null {
-        let token = localStorage.getItem('token');
-        let expires = localStorage.getItem('expires');
+        const accessToken = localStorage.getItem(this.accessTokenKey);
+        const refreshToken = localStorage.getItem(this.refreshTokenKey);
+        const expires = localStorage.getItem(this.expiresKey);
 
-        if (token != null && expires != null){
+        if (accessToken && refreshToken && expires){
             return {
-                token: token,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
                 expires: expires
             }
         }

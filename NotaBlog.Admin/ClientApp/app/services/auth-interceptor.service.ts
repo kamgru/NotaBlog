@@ -21,6 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 catchError(x => {
                     if (x instanceof HttpErrorResponse) {
                         if (x.status == 401){
+                            this.authService.invalidateToken();
                             this.router.navigate(['login']);
                         }
                     }

@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using NotaBlog.Admin.Data;
 using NotaBlog.Admin.Models;
+using NotaBlog.Admin.Services;
 using NotaBlog.Api.Services;
 using NotaBlog.Core.Commands;
 using NotaBlog.Core.Repositories;
@@ -32,7 +33,6 @@ namespace NotaBlog.Admin
         public IConfiguration Configuration { get; }
         public IHostingEnvironment HostingEnvironment { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var storyRepository = new StoryRepository(new MongoClient("mongodb://localhost:27017").GetDatabase("NotaBlog"));
@@ -48,7 +48,6 @@ namespace NotaBlog.Admin
             commandDispatcher.RegisterHandler(new UpdateStoryHandler(storyRepository, new DateTimeProvider()));
             services.AddTransient<ICommandDispatcher>(x => commandDispatcher);
 
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Users")));
 
@@ -62,27 +61,36 @@ namespace NotaBlog.Admin
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddAuthentication().AddJwtBearer(cfg => 
+            
+            services.AddTransient<ConfigurationService>();
+            services.AddMvc();
+
+            ConfigureJwt(services);
+        }
+
+        private void ConfigureJwt(IServiceCollection services)
+        {
+            var tokenConfiguration = Configuration.GetSection("TokenConfiguration")
+                .Get<TokenConfiguration>();
+
+            services.AddAuthentication().AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = !HostingEnvironment.IsDevelopment();
                 cfg.SaveToken = true;
 
                 cfg.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidIssuer = Configuration["Tokens:Issuer"],
-                    ValidAudience = Configuration["Tokens:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])),
+                    ValidIssuer = tokenConfiguration.Issuer,
+                    ValidAudience = tokenConfiguration.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfiguration.Key)),
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(0)
+                    ClockSkew = TimeSpan.FromMinutes(tokenConfiguration.ValidForMinutes)
                 };
-
-                
             });
-
-            services.AddTransient<ConfigurationService>();
-            services.AddMvc();
+            services.AddTransient<AuthorizationTokenFactory>();
+            services.AddTransient(x => tokenConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
