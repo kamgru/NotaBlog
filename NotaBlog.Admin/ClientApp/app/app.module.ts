@@ -5,21 +5,29 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home.component';
 import { NavbarComponent } from './components/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthService } from './services/auth.service';
+import { LoginComponent } from './components/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LogoutComponent } from './components/logout.component';
 
 @NgModule({
     bootstrap: [ AppComponent ],
     imports: [
         BrowserModule,
         StoriesModule,
-        AppRoutingModule
+        AppRoutingModule,
+        ReactiveFormsModule
     ],
     declarations: [
         NavbarComponent,
         HomeComponent,
+        LoginComponent,
+        LogoutComponent,
         AppComponent
     ],
     providers: [
-        { provide: 'BASE_URL', useFactory: getBaseUrl }
+        { provide: 'BASE_URL', useFactory: getBaseUrl },
+        AuthService
     ]
 })
 export class AppModule {

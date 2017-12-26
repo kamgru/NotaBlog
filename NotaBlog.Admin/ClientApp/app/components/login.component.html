@@ -1,0 +1,28 @@
+<div class="row mt-5">
+    <div class="col-sm-12 col-md-6 offset-md-3">
+        <div class="card mx-auto">
+            <h2 class="card-header">
+                Login to your blog
+            </h2>
+            <div class="card-body">
+                <div class="alert alert-danger fade show" role="alert" *ngIf="showError">
+                    invalid user name or password 
+                </div>
+            <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+                    <div class="form-group">
+                        <label>user name</label>
+                        <input type="text" class="form-control" formControlName="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>password</label>
+                        <input type="password" class="form-control" formControlName="password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
