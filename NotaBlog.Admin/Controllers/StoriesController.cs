@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NotaBlog.Admin.Messages;
+using NotaBlog.Admin.Models;
 using NotaBlog.Api.Dto;
 using NotaBlog.Api.Services;
 
 namespace NotaBlog.Admin.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/stories")]
     public class StoriesController : Controller
     {
@@ -58,7 +61,7 @@ namespace NotaBlog.Admin.Controllers
 
         [Route("{id}")]
         [HttpPatch]
-        public async Task<IActionResult> UpdateStory(string id, [FromBody]UpdateStoryRequestBody body)
+        public async Task<IActionResult> UpdateStory(string id, [FromBody]UpdateStoryModel body)
         {
             if (Guid.TryParse(id, out var guid))
             {

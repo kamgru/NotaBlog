@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
-import { FormGroup, FormControl } from '@angular/forms';
-import { retry } from 'rxjs/operators/retry';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { Validators } from '@angular/forms';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { LoginService } from '../services/login.service';
 
 @Component({
     selector: 'login',
@@ -21,7 +19,7 @@ export class LoginComponent {
     })
 
     constructor(
-        private authService: AuthService,
+        private loginService: LoginService,
         private router: Router
     ) {}
 
@@ -30,12 +28,12 @@ export class LoginComponent {
             this.showError = true;
             return;
         }
-        this.authService.login(this.loginForm.value.username, this.loginForm.value.password)
+        this.loginService.login(this.loginForm.value.username, this.loginForm.value.password)
             .pipe(
                 tap(_ => this.router.navigate([''])),
                 catchError(err => {
                     this.showError = true;
-                    return ErrorObservable.create('invalid login');
+                    return new EmptyObservable();
                 })
             )
             .subscribe();
