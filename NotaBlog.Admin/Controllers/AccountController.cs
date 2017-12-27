@@ -19,16 +19,11 @@ namespace NotaBlog.Admin.Controllers
     [Route("api/account")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly AuthorizationTokenFactory _authorizationTokenFactory;
+        private readonly LoginService _loginService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            AuthorizationTokenFactory authorizationTokenFactory)
+        public AccountController(LoginService loginService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _authorizationTokenFactory = authorizationTokenFactory;
+            _loginService = loginService;
         }
 
         [AllowAnonymous]
@@ -38,18 +33,13 @@ namespace NotaBlog.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
-                {
-                    var signInResult = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
-                    if (signInResult.Succeeded)
-                    {
-                        return Ok(_authorizationTokenFactory.Create(user.Email));
-                    }
-                }
+                var result = await _loginService.Login(model.Email, model.Password);
+                return result.Success
+                    ? (IActionResult)Ok(result.AuthorizationToken)
+                    : BadRequest();
             }
 
-            return BadRequest("Invalid login attempt");
+            return BadRequest();
         }
     }
 }

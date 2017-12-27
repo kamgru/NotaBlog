@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NotaBlog.Admin.Data;
 using NotaBlog.Admin.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,12 @@ using System.Threading.Tasks;
 
 namespace NotaBlog.Admin.Services
 {
-    public class AuthorizationTokenFactory
+    public interface IAuthorizationTokenFactory
+    {
+        AuthorizationToken Create(string username);
+    }
+
+    public class AuthorizationTokenFactory : IAuthorizationTokenFactory
     {
         private readonly TokenConfiguration _configuration;
         private readonly JwtSecurityTokenHandler _tokenHandler;
