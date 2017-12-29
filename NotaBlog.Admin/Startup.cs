@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace NotaBlog.Admin
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Users")));
-
+            
             services.AddIdentity<ApplicationUser, IdentityRole>(cfg => 
             {
                 cfg.Password.RequireDigit = false;
@@ -86,11 +87,17 @@ namespace NotaBlog.Admin
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromMinutes(tokenConfiguration.ValidForMinutes)
+                    ClockSkew = TimeSpan.Zero
                 };
+            });
+            services.AddTransient<ISecurityTokenValidator, JwtSecurityTokenHandler>(factory => {
+                var handler = new JwtSecurityTokenHandler();
+                handler.InboundClaimTypeMap.Clear();
+                return handler;
             });
             services.AddTransient<IAccessTokenFactory, AccessTokenFactory >();
             services.AddTransient<LoginService>();
+            services.AddTransient<RenewAccessService>();
             services.AddTransient(x => tokenConfiguration);
         }
 

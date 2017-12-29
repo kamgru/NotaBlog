@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NotaBlog.Admin.Data;
 using NotaBlog.Admin.Models;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,18 @@ namespace NotaBlog.Admin.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccessTokenFactory _tokenFactory;
+        private readonly ApplicationDbContext _applicationDbContext;
 
-        public LoginService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            IAccessTokenFactory tokenFactory)
+        public LoginService(
+            UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager, 
+            IAccessTokenFactory tokenFactory, 
+            ApplicationDbContext applicationDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenFactory = tokenFactory;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<LoginResult> Login(string username, string password)
@@ -40,10 +46,22 @@ namespace NotaBlog.Admin.Services
                 return new LoginResult(false);
             }
 
+            var refreshToken = _applicationDbContext.RefreshTokens.Find(username);
+            if (refreshToken == null)
+            {
+                refreshToken = new RefreshToken
+                {
+                    UserId = username,
+                    Token = Guid.NewGuid().ToString("N")
+                };
+                _applicationDbContext.RefreshTokens.Add(refreshToken);
+                _applicationDbContext.SaveChanges();
+            }
+
             return new LoginResult(true)
             {
                 AccessToken = _tokenFactory.Create(username),
-                RefreshToken = Guid.NewGuid().ToString("N")
+                RefreshToken = refreshToken.Token
             };
         }
     }

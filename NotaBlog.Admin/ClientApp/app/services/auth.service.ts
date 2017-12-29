@@ -24,18 +24,35 @@ export class AuthService {
             return of(false);
         }
 
-        return this.http.post<IToken>('/api/account/renew-access', {})
+        return this.http.post<IToken>('/api/account/renew-access', this.token)
             .pipe(
                 tap((token: IToken) => {
                     this.token = token;
                 }),
                 map((x:IToken) => true),
-                catchError(_ => of(false))
+                catchError(x => {
+                    return of(false);
+                })
             )
     }
 
-    public getAuthorizationHeader(): [string, string] {
-        return ['Authorization', 'Bearer ' + (this.token ? this.token.accessToken : '') ];
+    public getAuthorizationHeader(): Observable<[string, string]> {
+        if (this.token == null){
+            const empty:[string, string] = ['', ''];
+            return of(empty);
+        }
+
+        if (this.expired()) {
+            return this.renewAccess()
+                .pipe(
+                    map(x => <[string, string]>['Authorization', 'Bearer ' + (this.token ? this.token.accessToken : '') ])
+                )
+        }
+        else {
+            const header:[string, string] = ['Authorization', 'Bearer ' + (this.token ? this.token.accessToken : '') ];
+            return of(header);
+        }
+        
     }
 
     public login(username:string, password:string): Observable<Object> {

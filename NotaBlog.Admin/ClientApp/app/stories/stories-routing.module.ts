@@ -7,7 +7,7 @@ import { StoriesComponent } from './stories.component';
 import { AuthGuard } from '../services/auth-guard.service';
 
 const storiesRoutes:Routes = [
-    {path: 'stories', component: StoriesComponent, canActivate: [AuthGuard], children: [
+    {path: 'stories', component: StoriesComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard], children: [
         {path: '', component: StoriesListComponent},
         {path: 'add-new', component: StoryDetailsComponent, resolve: {story: StoryResolve} },
         {path: ':id', component: StoryDetailsComponent, resolve: {story: StoryResolve}}

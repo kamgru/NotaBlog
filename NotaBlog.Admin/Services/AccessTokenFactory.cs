@@ -32,6 +32,7 @@ namespace NotaBlog.Admin.Services
         {
             var header = CreateHeader();
             var expires = DateTime.UtcNow.AddMinutes(_configuration.ValidForMinutes);
+
             var payload = CreatePayload(username, expires);
             var token = new JwtSecurityToken(header, payload);
 

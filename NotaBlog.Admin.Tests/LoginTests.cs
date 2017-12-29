@@ -1,6 +1,8 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using NotaBlog.Admin.Data;
 using NotaBlog.Admin.Models;
 using NotaBlog.Admin.Services;
 using System;
@@ -77,8 +79,61 @@ namespace NotaBlog.Admin.Tests
             result.AccessToken.Should().BeEquivalentTo(token);
         }
 
-        private LoginService Service(FakeUserManager userManager = null, FakeSignInManager signInManager = null,
-            IAccessTokenFactory authorizationTokenFactory = null)
+        [Fact]
+        public void GivenSuccess_WhenRefreshTokenExists_ItShouldReturnSameRefreshToken()
+        {
+            var userManager = new FakeUserManager { FindByEmailAsyncResult = new ApplicationUser() };
+            var signInManager = new FakeSignInManager { PasswordSignInAsyncResult = SignInResult.Success };
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            var db = new ApplicationDbContext(optionsBuilder.Options);
+            db.RefreshTokens.Add(new RefreshToken { UserId = "username", Token = "test-refresh-token" });
+            db.SaveChanges();
+
+            var token = new AccessToken
+            {
+                Token = "testaccesstoken",
+                Expires = DateTime.Now.AddHours(1),
+            };
+            var tokenFactory = new Mock<IAccessTokenFactory>();
+            tokenFactory.Setup(x => x.Create(It.IsAny<string>()))
+                .Returns(token);
+
+            var result = Service(userManager, signInManager, tokenFactory.Object, db)
+                .Login("username", "password").Result;
+
+            result.Success.Should().BeTrue();
+            result.RefreshToken.Should().Be("test-refresh-token");
+        }
+
+        [Fact]
+        public void GivenSuccess_WhenRefreshTokenNotExists_ItShouldReturnNewRefreshToken()
+        {
+            var userManager = new FakeUserManager { FindByEmailAsyncResult = new ApplicationUser() };
+            var signInManager = new FakeSignInManager { PasswordSignInAsyncResult = SignInResult.Success };
+
+            var token = new AccessToken
+            {
+                Token = "testaccesstoken",
+                Expires = DateTime.Now.AddHours(1),
+            };
+            var tokenFactory = new Mock<IAccessTokenFactory>();
+            tokenFactory.Setup(x => x.Create(It.IsAny<string>()))
+                .Returns(token);
+
+            var result = Service(userManager, signInManager, tokenFactory.Object)
+                .Login("username", "password").Result;
+
+            result.Success.Should().BeTrue();
+            result.RefreshToken.Should().NotBeNullOrEmpty();
+        }
+
+        private LoginService Service(
+            FakeUserManager userManager = null,
+            FakeSignInManager signInManager = null,
+            IAccessTokenFactory authorizationTokenFactory = null, 
+            ApplicationDbContext applicationDbContext = null)
         {
             if (userManager == null)
             {
@@ -98,7 +153,14 @@ namespace NotaBlog.Admin.Tests
                 authorizationTokenFactory = new Mock<IAccessTokenFactory>().Object;
             }
 
-            return new LoginService(userManager, signInManager, authorizationTokenFactory);
+            if (applicationDbContext == null)
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                applicationDbContext = new ApplicationDbContext(optionsBuilder.Options);
+            }
+
+            return new LoginService(userManager, signInManager, authorizationTokenFactory, applicationDbContext);
         }
     }
 }
