@@ -1,66 +1,66 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { map, tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
 import { IToken } from '../models/IToken';
 
 @Injectable()
 export class AuthService {
 
-    private authenticated:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private readonly accessTokenKey:string = "accessToken";
-    private readonly refreshTokenKey:string = "refreshToken";
-    private readonly expiresKey:string = "expires";
+    private token:IToken | null;
+    constructor(private http: HttpClient) {}
 
-    get isAuthenticated(): Observable<boolean> {
-
-        let token = this.getToken();
-        if (token != null) {
-            let expires = new Date(token.expires);
-            let now = new Date();
-
-            this.authenticated.next(expires > now);
-        }
-        else {
-            this.authenticated.next(false);
+    public isAuthenticated():Observable<boolean> {
+        if (this.expired()){
+            return this.renewAccess();
         }
 
-        return this.authenticated.asObservable();
+        return of(true);
     }
 
-    public getAuthorizationHeader(): string {
-        const token = this.getToken();
-        if (token){
-            return "Bearer " + token.accessToken;
-        }
-        return "";
-    }
-
-    public storeToken(token:IToken): void {
-        localStorage.setItem(this.accessTokenKey, token.accessToken);
-        localStorage.setItem(this.refreshTokenKey, token.refreshToken);
-        localStorage.setItem(this.expiresKey, token.expires);
-    }
-
-    public invalidateToken(): void {
-        localStorage.removeItem(this.accessTokenKey);
-        localStorage.removeItem(this.refreshTokenKey);
-        localStorage.removeItem(this.expiresKey);
-        this.authenticated.next(false);
-    }
-
-    private getToken(): IToken | null {
-        const accessToken = localStorage.getItem(this.accessTokenKey);
-        const refreshToken = localStorage.getItem(this.refreshTokenKey);
-        const expires = localStorage.getItem(this.expiresKey);
-
-        if (accessToken && refreshToken && expires){
-            return {
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-                expires: expires
-            }
+    private renewAccess(): Observable<boolean>{
+        if (this.token == null){
+            return of(false);
         }
 
-        return null;
+        return this.http.post<IToken>('/api/account/renew-access', {})
+            .pipe(
+                tap((token: IToken) => {
+                    this.token = token;
+                }),
+                map((x:IToken) => true),
+                catchError(_ => of(false))
+            )
+    }
+
+    public getAuthorizationHeader(): [string, string] {
+        return ['Authorization', 'Bearer ' + (this.token ? this.token.accessToken : '') ];
+    }
+
+    public login(username:string, password:string): Observable<Object> {
+        const headers = new HttpHeaders()
+            .set('Content-Type', 'application/x-www-form-urlencoded');
+        
+        const params = new HttpParams()
+            .set('Email', username)
+            .set('Password', password);
+
+        return this.http.post<IToken>('/api/account/login', params.toString(), {headers: headers})
+            .pipe(
+                tap((token: IToken) => {
+                    this.token = token;
+                })
+            );
+    }
+
+    public logout(): void {
+        this.token = null;
+    }
+
+    private expired(): boolean {   
+        return this.token 
+            ? new Date(this.token.expires) < new Date() 
+            : true;
     }
 }

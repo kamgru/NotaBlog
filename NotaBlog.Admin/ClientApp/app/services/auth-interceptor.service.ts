@@ -1,28 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpErrorResponse, HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { catchError } from 'rxjs/operators/catchError';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { AuthService } from './auth.service';
-
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(private router:Router, private authService: AuthService) {}
+    constructor(private injector:Injector) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-        
-        const authRequest = request.clone({headers: request.headers.set('Authorization', this.authService.getAuthorizationHeader())})
+        if (request.url == '/api/account/login' || request.url == '/api/account/renew-access'){
+            return next.handle(request);
+        }
+
+        const authService = this.injector.get(AuthService);
+        const header = authService.getAuthorizationHeader();
+        const authRequest = request.clone({
+            headers: request.headers.set(header[0], header[1])
+        });
 
         return next.handle(authRequest)
             .pipe(
                 catchError(error => {
                     if (error instanceof HttpErrorResponse) {
                         if (error.status == 401){
-                            this.authService.invalidateToken();
-                            this.router.navigate(['login']);
+                            authService.logout();
                             return new EmptyObservable();
                         }
                     }
@@ -30,5 +34,4 @@ export class AuthInterceptor implements HttpInterceptor {
                 })
             );
     }
-    
 }

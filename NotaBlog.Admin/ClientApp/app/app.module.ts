@@ -11,7 +11,6 @@ import { HomeComponent } from './components/home.component';
 import { NavbarComponent } from './components/navbar.component';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './services/auth-interceptor.service';
-import { LoginService } from './services/login.service';
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -29,10 +28,9 @@ import { LoginService } from './services/login.service';
         AppComponent
     ],
     providers: [
+        AuthService,
         { provide: 'BASE_URL', useFactory: getBaseUrl },
         { provide: HTTP_INTERCEPTORS, multi: true, useClass: AuthInterceptor },
-        AuthService, 
-        LoginService,
     ]
 })
 export class AppModule {

@@ -89,7 +89,7 @@ namespace NotaBlog.Admin
                     ClockSkew = TimeSpan.FromMinutes(tokenConfiguration.ValidForMinutes)
                 };
             });
-            services.AddTransient<IAuthorizationTokenFactory, AuthorizationTokenFactory >();
+            services.AddTransient<IAccessTokenFactory, AccessTokenFactory >();
             services.AddTransient<LoginService>();
             services.AddTransient(x => tokenConfiguration);
         }

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
 import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'login',
@@ -19,7 +19,7 @@ export class LoginComponent {
     })
 
     constructor(
-        private loginService: LoginService,
+        private authService: AuthService,
         private router: Router
     ) {}
 
@@ -28,9 +28,9 @@ export class LoginComponent {
             this.showError = true;
             return;
         }
-        this.loginService.login(this.loginForm.value.username, this.loginForm.value.password)
+        this.authService.login(this.loginForm.value.username, this.loginForm.value.password)
             .pipe(
-                tap(_ => this.router.navigate([''])),
+                tap(_ => this.router.navigate(['/'])),
                 catchError(err => {
                     this.showError = true;
                     return new EmptyObservable();

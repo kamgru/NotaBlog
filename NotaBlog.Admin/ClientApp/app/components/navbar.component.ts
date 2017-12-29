@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AuthService } from '../services/auth.service';
+import { Router, NavigationStart } from '@angular/router';
 
 @Component({
     selector: 'navbar',
@@ -8,12 +7,15 @@ import { AuthService } from '../services/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-    private isAuthenticated:Observable<boolean>;
+    private hidden:boolean;
 
-    constructor(private authService: AuthService) {}
+    constructor(private router:Router) {}
 
     public ngOnInit(): void {
-        this.isAuthenticated = this.authService.isAuthenticated
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart){
+                this.hidden = event.url == '/login';
+            }
+        });
     }
-
 }

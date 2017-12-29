@@ -61,13 +61,12 @@ namespace NotaBlog.Admin.Tests
             var userManager = new FakeUserManager { FindByEmailAsyncResult = new ApplicationUser() };
             var signInManager = new FakeSignInManager { PasswordSignInAsyncResult = SignInResult.Success };
 
-            var token = new AuthorizationToken
+            var token = new AccessToken
             {
-                AccessToken = "testaccesstoken",
+                Token = "testaccesstoken",
                 Expires = DateTime.Now.AddHours(1),
-                RefreshToken = "testrefreshtoken"
             };
-            var tokenFactory = new Mock<IAuthorizationTokenFactory>();
+            var tokenFactory = new Mock<IAccessTokenFactory>();
             tokenFactory.Setup(x => x.Create(It.IsAny<string>()))
                 .Returns(token);
 
@@ -75,11 +74,11 @@ namespace NotaBlog.Admin.Tests
                 .Login("username", "password").Result;
 
             result.Success.Should().BeTrue();
-            result.AuthorizationToken.Should().BeEquivalentTo(token);
+            result.AccessToken.Should().BeEquivalentTo(token);
         }
 
         private LoginService Service(FakeUserManager userManager = null, FakeSignInManager signInManager = null,
-            IAuthorizationTokenFactory authorizationTokenFactory = null)
+            IAccessTokenFactory authorizationTokenFactory = null)
         {
             if (userManager == null)
             {
@@ -96,7 +95,7 @@ namespace NotaBlog.Admin.Tests
 
             if (authorizationTokenFactory == null)
             {
-                authorizationTokenFactory = new Mock<IAuthorizationTokenFactory>().Object;
+                authorizationTokenFactory = new Mock<IAccessTokenFactory>().Object;
             }
 
             return new LoginService(userManager, signInManager, authorizationTokenFactory);
