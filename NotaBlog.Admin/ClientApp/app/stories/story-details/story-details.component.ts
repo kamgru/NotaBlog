@@ -53,14 +53,18 @@ export class StoryDetailsComponent implements OnInit {
     private publishStory(): void {
         this.storiesService.updateStatus(this.story.id, 1)
         .pipe(
-            tap(_ => this.handleApiSuccess('publication succesful')),
+            tap(_ => {this.handleApiSuccess('publication succesful'); this.story.publicationStatus = 1}),
             this.handleApiError
         )
         .subscribe()
     }
 
     private unpublishStory(): void {
-        this.story.publicationStatus = 0;
-
+        this.storiesService.updateStatus(this.story.id, 0)
+        .pipe(
+            tap(_ => {this.handleApiSuccess('publication succesful'); this.story.publicationStatus = 0}),
+            this.handleApiError
+        )
+        .subscribe()
     }
 }

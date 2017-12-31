@@ -29,7 +29,16 @@ namespace NotaBlog.Core.Entities
         public void Publish(IDateTimeProvider dateTimeProvider)
         {
             PublicationStatus = PublicationStatus.Published;
-            Published = dateTimeProvider.Now();
+
+            if (!Published.HasValue)
+            {
+                Published = dateTimeProvider.Now();
+            }
+        }
+
+        public void Unpublish()
+        {
+            PublicationStatus = PublicationStatus.Draft;
         }
 
         public void Update(string title, string content, IDateTimeProvider dateTimeProvider)

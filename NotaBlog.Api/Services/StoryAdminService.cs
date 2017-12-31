@@ -51,6 +51,20 @@ namespace NotaBlog.Api.Services
             };
         }
 
+        public async Task<Result> UnpublishStory(Guid storyId)
+        {
+            var validationResult = await _commandDispatcher.Submit(new UnpublishStory
+            {
+                EntityId = storyId
+            });
+
+            return new Result
+            {
+                Errors = validationResult.Errors,
+                Success = validationResult.Success
+            };
+        }
+
         public async Task<PaginatedData<StoryHeaderViewModel>> GetStoryHeaders(int page, int count)
         {
             if (page < 1 || count < 1)

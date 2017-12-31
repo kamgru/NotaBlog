@@ -93,6 +93,14 @@ namespace NotaBlog.Admin.Controllers
                         ? (IActionResult)Ok()
                         : BadRequest(result.ErrorMessage);
                 }
+
+                if (model.StoryStatus == StoryStatus.Unpublished)
+                {
+                    var result = await _storyAdminService.UnpublishStory(guid);
+                    return result.Success
+                        ? (IActionResult)Ok()
+                        : BadRequest(result.ErrorMessage);
+                }
             }
 
             return NotFound();
