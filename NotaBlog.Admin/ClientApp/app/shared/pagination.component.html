@@ -1,0 +1,13 @@
+<nav>
+    <ul class="pagination">
+        <li class="page-item" [ngClass]="{'disabled':(currentPage == 1)}">
+            <a href="javascript:;" class="page-link" (click)="pageChange(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let idx of pageIndexCollection"[ngClass]="{'active':(idx == currentPage)}" >
+            <a class="page-link" (click)="pageChange(idx)" href="javascript:;">{{idx}}</a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled':(currentPage == totalPages)}">
+            <a href="javascript:;" class="page-link" (click)="pageChange(currentPage + 1)">Next</a>
+        </li>
+    </ul>
+</nav>

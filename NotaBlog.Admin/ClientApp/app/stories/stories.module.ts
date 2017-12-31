@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { StoriesRoutingModule } from './stories-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../shared/shared.module';
 
 import { StoriesService } from './stories.service';
 import { StoryResolve } from './story-details/story.resolve';
@@ -15,6 +16,7 @@ import { PublicationStatusPipe } from './publication-status.pipe';
 @NgModule({
     imports: [
         CommonModule, 
+        SharedModule,
         ReactiveFormsModule,
         HttpClientModule,
         StoriesRoutingModule, 
