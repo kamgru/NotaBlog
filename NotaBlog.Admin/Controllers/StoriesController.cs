@@ -59,25 +59,43 @@ namespace NotaBlog.Admin.Controllers
             return BadRequest();
         }
 
-        [Route("{id}")]
+        [Route("{id}/content")]
         [HttpPatch]
-        public async Task<IActionResult> UpdateStory(string id, [FromBody]UpdateStoryModel body)
+        public async Task<IActionResult> UpdateStoryContent(string id, [FromBody]UpdateContentModel model)
         {
             if (Guid.TryParse(id, out var guid))
             {
                 var result = await _storyAdminService.UpdateStory(new UpdateStoryRequest
                 {
                     StoryId = guid,
-                    Title = body.Title,
-                    Content = body.Content
+                    Title = model.Title,
+                    Content = model.Content
                 });
 
                 return result.Success
-                    ? (IActionResult)Ok(result)
-                    : BadRequest(string.Join("\n", result.Errors));
+                    ? (IActionResult)Ok()
+                    : BadRequest(result.ErrorMessage);
             }
 
-            return BadRequest();
+            return NotFound();
+        }
+
+        [Route("{id}/publication-status")]
+        [HttpPatch]
+        public async Task<IActionResult> UpdateStoryPublicationStatus(string id, [FromBody]UpdateStatusModel model)
+        {
+            if (Guid.TryParse(id, out var guid))
+            {
+                if (model.StoryStatus == StoryStatus.Published)
+                {
+                    var result = await _storyAdminService.PublishStory(guid);
+                    return result.Success
+                        ? (IActionResult)Ok()
+                        : BadRequest(result.ErrorMessage);
+                }
+            }
+
+            return NotFound();
         }
     }
 }

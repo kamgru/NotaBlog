@@ -4,6 +4,7 @@ import { IPaginatedData } from  '../models/IPaginatedData';
 import { Observable } from 'rxjs/Observable';
 import { IStory } from './models/IStory';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { IApiResult } from '../models/IApiResult';
 
 @Injectable()
 export class StoriesService {
@@ -20,6 +21,10 @@ export class StoriesService {
     }
 
     public updateStory(id:string, title:string, content:string): Observable<any> {
-        return this.http.patch(`/api/stories/${id}`, {title: title, content: content});
+        return this.http.patch(`/api/stories/${id}/content`, {title: title, content: content});
+    }
+
+    public updateStatus(id:string, status:number): Observable<any> {
+        return this.http.patch(`/api/stories/${id}/publication-status`, {storyStatus: status});
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NotaBlog.Admin.Models
 {
-    public class UpdateStoryModel
+    public class UpdateContentModel
     {
         public string Title { get; set; }
         public string Content { get; set; }

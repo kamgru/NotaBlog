@@ -12,6 +12,8 @@ import { StoriesComponent } from './stories.component';
 import { StoriesListComponent } from './stories-list/stories-list.component';
 import { StoryDetailsComponent } from './story-details/story-details.component';
 import { PublicationStatusPipe } from './publication-status.pipe';
+import { StoryContentComponent } from './story-details/story-content.component';
+import { PublicationStatusComponent } from './story-details/publication-status.component';
 
 @NgModule({
     imports: [
@@ -25,6 +27,8 @@ import { PublicationStatusPipe } from './publication-status.pipe';
         StoriesComponent,
         StoriesListComponent, 
         StoryDetailsComponent, 
+        StoryContentComponent,
+        PublicationStatusComponent,
         PublicationStatusPipe
     ],
     providers: [

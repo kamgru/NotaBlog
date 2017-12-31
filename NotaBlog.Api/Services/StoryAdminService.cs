@@ -46,7 +46,8 @@ namespace NotaBlog.Api.Services
             return new PublishStoryResult
             {
                 StoryId = storyId,
-                Success = validationResult.Success
+                Success = validationResult.Success,
+                Errors = validationResult.Errors
             };
         }
 

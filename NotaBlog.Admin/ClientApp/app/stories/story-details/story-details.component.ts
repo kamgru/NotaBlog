@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { IStory } from '../models/IStory';
 import { StoriesService } from '../stories.service';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
+import { IApiResult } from '../../models/IApiResult';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'story-details',
@@ -15,12 +17,20 @@ export class StoryDetailsComponent implements OnInit {
 
     private story:IStory;
     private error:string | null;
-    private showSuccess:boolean = false;
+    private success:string | null;
 
-    public storyForm = new FormGroup({
-        title: new FormControl(),
-        content: new FormControl()
+    private handleApiError = catchError(err => {
+        if (err instanceof HttpErrorResponse){
+            this.error = err.error;
+            this.success = null;
+        }
+        return new EmptyObservable();
     })
+
+    private handleApiSuccess(message:string):void {
+        this.success = message;
+        this.error = null;
+    }
 
     constructor(
         private storiesService: StoriesService,
@@ -29,28 +39,28 @@ export class StoryDetailsComponent implements OnInit {
 
     public ngOnInit(): void {
         this.story = this.route.snapshot.data['story'];
-        this.storyForm.reset({
-            title: this.story.title,
-            content: this.story.content 
-        });
-        this.storyForm.valueChanges.subscribe(x => {
-        });
     }
 
-    public onSubmit(): void {
-        this.storiesService.updateStory(this.story.id, this.storyForm.value.title, this.storyForm.value.content)
+    private updateContent(story:IStory):void {
+        this.storiesService.updateStory(this.story.id, story.title, story.content)
             .pipe(
-                tap(_ => {
-                    this.showSuccess = true;
-                    this.error = null;
-                    this.storyForm.markAsPristine();
-                }),
-                catchError(x => {
-                    this.error = x.error;
-                    this.showSuccess = false;
-                    return ErrorObservable.create('update error');
-                }),
+                tap(_ => this.handleApiSuccess('update succesful')),
+                this.handleApiError
             )
-            .subscribe()
+            .subscribe();
+    }
+
+    private publishStory(): void {
+        this.storiesService.updateStatus(this.story.id, 1)
+        .pipe(
+            tap(_ => this.handleApiSuccess('publication succesful')),
+            this.handleApiError
+        )
+        .subscribe()
+    }
+
+    private unpublishStory(): void {
+        this.story.publicationStatus = 0;
+
     }
 }

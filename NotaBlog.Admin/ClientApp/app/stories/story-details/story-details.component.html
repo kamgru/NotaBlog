@@ -1,30 +1,23 @@
 <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="error">
-    <strong>There was an error :(</strong> 
-    <p>{{error}}</p>
+    {{error}}
     <button type="button" class="close" data-dismiss="alert">
         <span>&times;</span>
     </button>
 </div>
 
-<div class="alert alert-success alert-dismissible fade show" role="alert" [hidden]="!showSuccess">
-    <strong>story updated :)</strong> 
+<div class="alert alert-success alert-dismissible fade show" role="alert" *ngIf="success">
+    {{success}}
     <button type="button" class="close" data-dismiss="alert">
         <span>&times;</span>
     </button>
 </div>
 
-<form [formGroup]="storyForm" novalidate (ngSubmit)="onSubmit()">
-    <div class="form-group">
-        <label>title</label>
-        <input type="text" class="form-control" formControlName="title">
+<div class="row flex-sm-row-reverse">
+    <div class="col-sm-4 ">
+        <publication-status [story]="story" (onPublish)="publishStory()" (onUnpublish)="unpublishStory()"></publication-status>
     </div>
 
-    <div class="form-group">
-        <label>content</label>
-        <textarea rows="15" class="form-control" formControlName="content"></textarea>
+    <div class="col-sm-8">
+        <story-content [story]="story" (onStoryUpdate)="updateContent($event)"></story-content>
     </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" *ngIf="!storyForm.pristine">save</button>
-    </div>
-</form>
+</div>

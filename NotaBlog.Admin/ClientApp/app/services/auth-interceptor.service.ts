@@ -5,6 +5,9 @@ import { EmptyObservable } from 'rxjs/observable/EmptyObservable';
 import { AuthService } from './auth.service';
 import { catchError } from 'rxjs/operators';
 import { map, tap, concatMap } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
@@ -40,6 +43,6 @@ export class AuthInterceptor implements HttpInterceptor {
                 return new EmptyObservable();
             }
         }
-        return error;
+        return ErrorObservable.create(error);
     }
 }
