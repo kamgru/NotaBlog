@@ -67,4 +67,13 @@ export class StoryDetailsComponent implements OnInit {
         )
         .subscribe()
     }
+
+    private updateSeName(seName:string):void{
+        this.storiesService.updateSeName(this.story.id, seName)
+        .pipe(
+            tap(_ => {this.handleApiSuccess('update successful'); this.story.seName = seName;}),
+            this.handleApiError
+        )
+        .subscribe();
+    }
 }

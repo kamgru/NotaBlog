@@ -27,4 +27,8 @@ export class StoriesService {
     public updateStatus(id:string, status:number): Observable<any> {
         return this.http.patch(`/api/stories/${id}/publication-status`, {storyStatus: status});
     }
+
+    public updateSeName(id:string, seName:string): Observable<any> {
+        return this.http.patch(`/api/stories/${id}/se-name`, {seName: seName});
+    }
 }

@@ -105,5 +105,25 @@ namespace NotaBlog.Admin.Controllers
 
             return NotFound();
         }
+
+        [Route("{id}/se-name")]
+        [HttpPatch]
+        public async Task<IActionResult> UpdateStorySeName(string id, [FromBody]UpdateSeNameModel model)
+        {
+            if (ModelState.IsValid && Guid.TryParse(id, out var guid))
+            {
+                var result = await _storyAdminService.UpdateSeName(new UpdateSeNameRequest
+                {
+                    StoryId = guid,
+                    SeName = model.SeName
+                });
+
+                return result.Success
+                        ? (IActionResult)Ok()
+                        : BadRequest(result.ErrorMessage);
+            }
+
+            return NotFound();
+        }
     }
 }

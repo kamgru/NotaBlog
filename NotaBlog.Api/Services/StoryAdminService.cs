@@ -135,5 +135,20 @@ namespace NotaBlog.Api.Services
                 Errors = validationResult.Errors
             };
         }
+
+        public async Task<Result> UpdateSeName(UpdateSeNameRequest request)
+        {
+            var validationResult = await _commandDispatcher.Submit(new SetSeName
+            {
+                EntityId = request.StoryId,
+                SeName = request.SeName
+            });
+
+            return new Result
+            {
+                Success = validationResult.Success,
+                Errors = validationResult.Errors
+            };
+        }
     }
 }

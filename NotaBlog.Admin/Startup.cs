@@ -48,6 +48,7 @@ namespace NotaBlog.Admin
             commandDispatcher.RegisterHandler(new PublishStoryHandler(storyRepository, new DateTimeProvider()));
             commandDispatcher.RegisterHandler(new UpdateStoryHandler(storyRepository, new DateTimeProvider()));
             commandDispatcher.RegisterHandler(new UnpublishStoryHandler(storyRepository));
+            commandDispatcher.RegisterHandler(new SetSetNameCommandHandler(storyRepository));
             services.AddTransient<ICommandDispatcher>(x => commandDispatcher);
 
             services.AddDbContext<ApplicationDbContext>(options =>
