@@ -1,0 +1,4 @@
+<div *ngIf="story">
+    <button type="button" class="btn btn-success" *ngIf="story.publicationStatus == 0" (click)="publish()">Publish</button>
+    <button type="button" class="btn btn-warning" *ngIf="story.publicationStatus == 1" (click)="unpublish()">Unpublish</button>
+</div>

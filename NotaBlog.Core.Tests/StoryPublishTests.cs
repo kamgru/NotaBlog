@@ -21,7 +21,7 @@ namespace NotaBlog.Core.Tests
         }
 
         [Fact]
-        public void WhenPublished_ItShouldSetPublishedDateToNow()
+        public void WhenPublishedDateNull_ItShouldSetPublishedDateToNow()
         {
             var dateTimeProvider = new MockDateTimeProvider
             {
@@ -33,6 +33,22 @@ namespace NotaBlog.Core.Tests
             story.Publish(dateTimeProvider);
 
             story.Published.Should().BeCloseTo(dateTimeProvider.DateTimeNow);
+        }
+
+        [Fact]
+        public void GivenPreviouslyPublishedStory_WhenPublishedDateNotNull_ItShouldNotUpdatePublishedDate()
+        {
+            var firstPublished = DateTime.Parse("2016-12-16 12:35:00");
+            var dateTimeProvider = new MockDateTimeProvider { DateTimeNow = firstPublished };
+
+            var story = CreateDefault();
+            story.Publish(dateTimeProvider);
+            story.Unpublish();
+
+            dateTimeProvider.DateTimeNow = firstPublished.AddMonths(2);
+            story.Publish(dateTimeProvider);
+
+            story.Published.ShouldBeEquivalentTo(firstPublished);
         }
     }
 }

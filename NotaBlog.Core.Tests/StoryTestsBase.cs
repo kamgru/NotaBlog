@@ -14,5 +14,12 @@ namespace NotaBlog.Core.Tests
             var story = Entities.Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
             return story;
         }
+
+        protected Story CreatePublished()
+        {
+            var story = CreateDefault();
+            story.Publish(_dateTimeProvider);
+            return story;
+        }
     }
 }

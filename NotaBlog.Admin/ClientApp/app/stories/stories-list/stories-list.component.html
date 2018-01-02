@@ -1,0 +1,43 @@
+<h2>Stories</h2>
+
+<div class="row">
+    <div class="col">
+        <a routerLink="/stories/add-new">
+            <button type="button" class="btn btn-primary mb-2">Add New</button>
+        </a>
+    </div>
+    <div class="col">
+        <div class="form">
+            <div class="form-row">
+                <div class="col">
+                    <select class="custom-select float-right" (change)="pageSizeChanged($event)">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                    </select>
+                </div>
+                <div class="col" *ngIf="data.totalCount > pageSize">
+                    <pagination [pageSize]="pageSize" [totalItems]="data.totalCount" (onPageChange)="pageChange($event)" *ngIf="data.items.length > 0"></pagination>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+
+</div>
+<table class="table table-condensed table-hover table-sm stories-table">
+    <thead class="thead-dark">
+        <tr>
+            <th>title</th>
+            <th>status</th>
+            <th>date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let story of data.items" (click)="navigateTo(story)">
+            <td>{{story.title}}</td>
+            <td>{{story.publicationStatus | publicationStatus}}</td>
+            <td>{{story.created | date : 'dd/MM/yy'}}</td>
+        </tr>
+    </tbody>
+</table>

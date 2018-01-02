@@ -1,0 +1,44 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { StoriesRoutingModule } from './stories-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../shared/shared.module';
+
+import { StoriesService } from './stories.service';
+import { StoryResolve } from './story-details/story.resolve';
+
+import { StoriesComponent } from './stories.component';
+import { StoriesListComponent } from './stories-list/stories-list.component';
+import { StoryDetailsComponent } from './story-details/story-details.component';
+import { PublicationStatusPipe } from './publication-status.pipe';
+import { StoryContentComponent } from './story-details/story-content.component';
+import { PublicationStatusComponent } from './story-details/publication-status.component';
+import { SeNameComponent } from './story-details/se-name.component';
+
+@NgModule({
+    imports: [
+        CommonModule, 
+        SharedModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        StoriesRoutingModule, 
+    ],
+    declarations: [
+        StoriesComponent,
+        StoriesListComponent, 
+        StoryDetailsComponent, 
+        StoryContentComponent,
+        PublicationStatusComponent,
+        SeNameComponent,
+        PublicationStatusPipe
+    ],
+    providers: [
+        StoriesService, 
+        StoryResolve
+    ],
+    exports: [
+        StoriesRoutingModule
+    ]
+})
+export class StoriesModule {}
