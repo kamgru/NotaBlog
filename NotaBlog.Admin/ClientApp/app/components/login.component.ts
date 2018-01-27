@@ -11,9 +11,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginComponent {
 
-    private showError:boolean = false;
+    public showError:boolean = false;
 
-    private loginForm:FormGroup = new FormGroup({
+    public loginForm:FormGroup = new FormGroup({
         'username': new FormControl('', [Validators.required]),
         'password': new FormControl('', [Validators.required])
     })

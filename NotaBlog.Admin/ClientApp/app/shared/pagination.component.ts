@@ -28,7 +28,7 @@ export class PaginationComponent implements OnChanges {
         this.pageIndexCollection = this.calculatePageIndices(this.currentPage);
     }
 
-    private pageChange(page:number): void {
+    public pageChange(page:number): void {
         this.updatePagination(page);
         this.onPageChange.emit(this.currentPage);
     }

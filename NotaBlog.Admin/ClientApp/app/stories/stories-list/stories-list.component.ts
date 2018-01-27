@@ -18,7 +18,7 @@ import { IPaginatedData } from "../../models/IPaginatedData";
 })
 export class StoriesListComponent implements OnInit {
 
-    private data:IPaginatedData<IStoryHeader> = {items: [], totalCount: 0};
+    public data:IPaginatedData<IStoryHeader> = {items: [], totalCount: 0};
     pageSize = 10;
 
     constructor(
@@ -26,7 +26,7 @@ export class StoriesListComponent implements OnInit {
         private router: Router
     ) { }
 
-    private pageSizeChanged($event:any):void {
+    public pageSizeChanged($event:any):void {
         const opts = $event.target.selectedOptions[0];
         this.pageSize = opts.value;
         this.loadData(1);

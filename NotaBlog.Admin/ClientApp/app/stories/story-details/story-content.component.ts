@@ -11,7 +11,7 @@ export class StoryContentComponent implements OnChanges {
     @Input() story:IStory;
     @Output() onStoryUpdate = new EventEmitter();
     
-    private storyForm = new FormGroup({
+    public storyForm = new FormGroup({
         title: new FormControl(),
         content: new FormControl()
     });
@@ -25,7 +25,7 @@ export class StoryContentComponent implements OnChanges {
         }
     }
 
-    private onSubmit():void {
+    public onSubmit():void {
         const value = this.storyForm.value;
         this.onStoryUpdate.emit(value);
     }

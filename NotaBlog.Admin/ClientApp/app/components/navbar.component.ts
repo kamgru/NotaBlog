@@ -7,7 +7,7 @@ import { Router, NavigationStart } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
-    private hidden:boolean;
+    public hidden:boolean;
 
     constructor(private router:Router) {}
 

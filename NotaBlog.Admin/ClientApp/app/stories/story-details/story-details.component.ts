@@ -15,9 +15,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class StoryDetailsComponent implements OnInit {
 
-    private story:IStory;
-    private error:string | null;
-    private success:string | null;
+    public story:IStory;
+    public error:string | null;
+    public success:string | null;
 
     private handleApiError = catchError(err => {
         if (err instanceof HttpErrorResponse){
@@ -41,7 +41,7 @@ export class StoryDetailsComponent implements OnInit {
         this.story = this.route.snapshot.data['story'];
     }
 
-    private updateContent(story:IStory):void {
+    public updateContent(story:IStory):void {
         this.storiesService.updateStory(this.story.id, story.title, story.content)
             .pipe(
                 tap(_ => this.handleApiSuccess('update succesful')),
@@ -50,7 +50,7 @@ export class StoryDetailsComponent implements OnInit {
             .subscribe();
     }
 
-    private publishStory(): void {
+    public publishStory(): void {
         this.storiesService.updateStatus(this.story.id, 1)
         .pipe(
             tap(_ => {this.handleApiSuccess('publication succesful'); this.story.publicationStatus = 1}),
@@ -59,7 +59,7 @@ export class StoryDetailsComponent implements OnInit {
         .subscribe()
     }
 
-    private unpublishStory(): void {
+    public unpublishStory(): void {
         this.storiesService.updateStatus(this.story.id, 0)
         .pipe(
             tap(_ => {this.handleApiSuccess('publication succesful'); this.story.publicationStatus = 0}),
@@ -68,7 +68,7 @@ export class StoryDetailsComponent implements OnInit {
         .subscribe()
     }
 
-    private updateSeName(seName:string):void{
+    public updateSeName(seName:string):void{
         this.storiesService.updateSeName(this.story.id, seName)
         .pipe(
             tap(_ => {this.handleApiSuccess('update successful'); this.story.seName = seName;}),
