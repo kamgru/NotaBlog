@@ -12,8 +12,6 @@ namespace NotaBlog.Persistence.Tests
 {
     public class SettingsRepositoryTests
     {
-        private const string ConnectionString = "mongodb://localhost:27017";
-        private const string Database = "NotaBlog_TEST";
         private const string Collection = SettingsRepository.CollectionName;
 
         [Fact]
@@ -87,8 +85,7 @@ namespace NotaBlog.Persistence.Tests
 
         private IMongoDatabase GetDatabase()
         {
-            return new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            return MongoTestDbProvider.GetDatabase();
         }
     }
 }

@@ -14,10 +14,7 @@ namespace NotaBlog.Persistence.Tests
 {
     public class StoryRepositoryTests
     {
-        private const string ConnectionString = "mongodb://localhost:27017";
-        private const string Database = "NotaBlog_TEST";
         private const string Collection = "Stories";
-
         private readonly IDateTimeProvider _dateTimeProvider = new MockDateTimeProvider { DateTimeNow = DateTime.UtcNow };
 
         [Fact]
@@ -27,8 +24,7 @@ namespace NotaBlog.Persistence.Tests
             story.Update("title", "content", _dateTimeProvider);
             story.Publish(_dateTimeProvider);
 
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
 
             new StoryRepository(database)
@@ -53,8 +49,7 @@ namespace NotaBlog.Persistence.Tests
             story.Update("title", "content", _dateTimeProvider);
             story.Publish(_dateTimeProvider);
 
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
             database.GetCollection<Story>(Collection).InsertOne(story);
 
@@ -77,8 +72,7 @@ namespace NotaBlog.Persistence.Tests
             story.Update("title", "content", _dateTimeProvider);
             story.Publish(_dateTimeProvider);
 
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
             database.GetCollection<Story>(Collection).InsertOne(story);
 
@@ -100,8 +94,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestGetMultiple()
         {
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
 
             var story1 = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
@@ -125,7 +118,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void WhenFilterNull_ItShouldThrowException()
         {
-            var repository = new StoryRepository(new MongoClient(ConnectionString).GetDatabase(Database));
+            var repository = new StoryRepository(MongoTestDbProvider.GetDatabase());
             Func<Task> test = async () => await repository.Get(filter: null);
             test.Should().Throw<ArgumentNullException>();
         }
@@ -133,8 +126,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void WhenPredicateNull_ItShouldReturnAllEntities()
         {
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
             database.GetCollection<Story>(Collection).InsertOne(new Story());
             database.GetCollection<Story>(Collection).InsertOne(new Story());
@@ -152,8 +144,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestGetPaginated()
         {
-            var database = new MongoClient(ConnectionString)
-                .GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
             database.GetCollection<Story>(Collection).InsertOne(new Story());
             database.GetCollection<Story>(Collection).InsertOne(new Story());
@@ -178,7 +169,7 @@ namespace NotaBlog.Persistence.Tests
         [Fact]
         public void TestGetBySeName()
         {
-            var database = new MongoClient(ConnectionString).GetDatabase(Database);
+            var database = MongoTestDbProvider.GetDatabase();
             database.DropCollection(Collection);
 
             var story = Story.CreateNew(Guid.NewGuid(), _dateTimeProvider);
