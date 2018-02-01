@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { map, tap, concatMap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { appConfig } from '../app.config';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -14,12 +15,15 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(private injector:Injector) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+
+        const interceptedRequest = request.clone({url: appConfig.apiBase + request.url});
+
         if (request.url == '/api/account/login' || request.url == '/api/account/renew-access'){
-            return next.handle(request);
+            return next.handle(interceptedRequest);
         }
 
         const authService:AuthService = this.injector.get(AuthService);
-        const mapAuthRequest = map(authHeader => this.createAuthRequest(authHeader, request));
+        const mapAuthRequest = map(authHeader => this.createAuthRequest(authHeader, interceptedRequest));
         const catchAuthError = catchError(error => this.handleAuthError(error, authService)); 
         const handleAuthRequest = concatMap((req:HttpRequest<any>) => next.handle(req).pipe(catchAuthError));
 

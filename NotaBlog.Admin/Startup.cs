@@ -121,8 +121,10 @@ namespace NotaBlog.Admin
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            var pathBase = Configuration.GetValue<string>("PathBase");
+            app.UsePathBase(pathBase);
             app.UseStaticFiles();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

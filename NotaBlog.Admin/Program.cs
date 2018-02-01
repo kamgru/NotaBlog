@@ -17,9 +17,19 @@ namespace NotaBlog.Admin
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var configFile = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(configFile)
+                .Build();
+
+            return WebHost.CreateDefaultBuilder(args)
+                .UseUrls(configuration.GetValue<string>("Urls"))
                 .UseStartup<Startup>()
                 .Build();
+        }
+            
     }
 }
